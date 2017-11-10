@@ -27,7 +27,7 @@ class Products extends CORE_Controller
         $data['_switcher_settings'] = $this->load->view('template/elements/switcher', '', TRUE);
         $data['_side_bar_navigation'] = $this->load->view('template/elements/side_bar_navigation', '', TRUE);
         $data['_top_navigation'] = $this->load->view('template/elements/top_navigation', '', TRUE);
-        $data['title'] = 'Product Management';
+        $data['title'] = 'Menu Management';
 
         $this->load->view('products_view', $data);
     }

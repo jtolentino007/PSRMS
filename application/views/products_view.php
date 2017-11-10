@@ -32,6 +32,7 @@
             float: left;
         }
 
+
         td.details-control {
             background: url('assets/img/Folder_Closed.png') no-repeat center center;
             cursor: pointer;
@@ -65,6 +66,10 @@
             to { -webkit-transform: rotate(360deg); }
         }
 
+        .no-back {
+            background: none!important;
+        }
+
         .numeric{
             text-align: right;
             width: 60%;
@@ -73,6 +78,12 @@
         .select2-container {
             min-width: 100%;
             z-index: 999999999;
+        }
+
+        .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+            background: transparent;
+            border-bottom: none;
+            font-weight: bolder;
         }
 
     </style>
@@ -98,7 +109,7 @@
                                     <div id="div_product_list">
                                         <div class="panel panel-default">
                                             <div class="panel-body table-responsive" style="border-top: 5px solid #2196f3;">
-                                                <h1>Products</h1>
+                                                <h1>MENU</h1>
                                                 <table id="tbl_products" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                                     <thead>
                                                     <tr>
@@ -316,7 +327,7 @@
                     <div class="modal-content">
                         <div class="modal-header" style="background-color:none;">
                             <button type="button" class="close"   data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title"><span id="modal_mode"> </span>Product Information</h4>
+                            <h4 class="modal-title"><span id="modal_mode"> </span>Menu Information</h4>
                         </div>
                         <div class="modal-body" style="overflow:hidden;">
                             <form id="frm_product">
@@ -502,7 +513,7 @@
 
             <div id="modal_confirmation" class="modal fade" tabindex="-1" role="dialog"><!--modal-->
                 <div class="modal-dialog modal-sm">
-                    <div class="modal-content"><!---content--->
+                    <div class="modal-content"><!---content-->
                         <div class="modal-header">
                             <button type="button" class="close"   data-dismiss="modal" aria-hidden="true">X</button>
                             <h4 class="modal-title"><span id="modal_mode"> </span>Confirm Deletion</h4>
@@ -516,13 +527,13 @@
                             <button id="btn_yes" type="button" class="btn btn-danger" data-dismiss="modal">Yes</button>
                             <button id="btn_close" type="button" class="btn btn-default" data-dismiss="modal">No</button>
                         </div>
-                    </div><!---content---->
+                    </div><!---content-->
                 </div>
             </div><!---modal-->
 
             <div id="modal_inventory_type" class="modal fade" tabindex="-1" role="dialog"><!--modal-->
                 <div class="modal-dialog modal-md">
-                    <div class="modal-content"><!---content--->
+                    <div class="modal-content"><!---content-->
                         <div class="modal-header">
                             <button type="button" class="close"   data-dismiss="modal" aria-hidden="true">X</button>
                             <h4 class="modal-title"><span id="modal_mode"> </span>New Inventory Type</h4>
@@ -556,13 +567,13 @@
                             <button id="btn_create_inventory_type" type="button" class="btn btn-primary"  style="text-transform: capitalize;font-family: Tahoma, Georgia, Serif;"><span class=""></span> Create</button>
                             <button id="btn_close_unit_group" type="button" class="btn btn-default" data-dismiss="modal" style="text-transform: capitalize;font-family: Tahoma, Georgia, Serif;">Cancel</button>
                         </div>
-                    </div><!---content---->
+                    </div><!---content-->
                 </div>
             </div><!---modal-->
             
             <div id="modal_category_group" class="modal fade" tabindex="-1" role="dialog"><!--modal-->
                 <div class="modal-dialog modal-md">
-                    <div class="modal-content"><!---content--->
+                    <div class="modal-content"><!---content-->
                         <div class="modal-header">
                             <button type="button" class="close"   data-dismiss="modal" aria-hidden="true">X</button>
                             <h4 class="modal-title"><span id="modal_mode"> </span>New Category Group</h4>
@@ -588,21 +599,38 @@
                                     </div>
                                 </div>
                             </form>
-
-
                         </div>
 
                         <div class="modal-footer">
                             <button id="btn_create_category_group" type="button" class="btn btn-primary"  style="text-transform: capitalize;font-family: Tahoma, Georgia, Serif;"><span class=""></span> Create</button>
                             <button id="btn_close_unit_group" type="button" class="btn btn-default" data-dismiss="modal" style="text-transform: capitalize;font-family: Tahoma, Georgia, Serif;">Cancel</button>
                         </div>
-                    </div><!---content---->
+                    </div><!--content-->
                 </div>
             </div><!---modal-->
-            
+
+            <div id="modal_details" class="modal fade" role="dialog">
+              <div class="modal-dialog modal-lg">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Details</h4>
+                  </div>
+                  <div id="details_body" class="modal-body">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+                        
             <div id="modal_brand_group" class="modal fade" tabindex="-1" role="dialog"><!--modal-->
                 <div class="modal-dialog modal-md">
-                    <div class="modal-content"><!---content--->
+                    <div class="modal-content"><!---content-->
                         <div class="modal-header">
                             <button type="button" class="close"   data-dismiss="modal" aria-hidden="true">X</button>
                             <h4 class="modal-title"><span id="modal_mode"> </span>New Brand Group</h4>
@@ -636,13 +664,13 @@
                             <button id="btn_create_brand_group" type="button" class="btn btn-primary"  style="text-transform: capitalize;font-family: Tahoma, Georgia, Serif;"><span class=""></span> Create</button>
                             <button id="btn_close_brand_group" type="button" class="btn btn-default" data-dismiss="modal" style="text-transform: capitalize;font-family: Tahoma, Georgia, Serif;">Cancel</button>
                         </div>
-                    </div><!---content---->
+                    </div><!---content-->
                 </div>
             </div><!---modal-->
 
             <div id="modal_unit_group" class="modal fade" tabindex="-1" role="dialog"><!--modal-->
                 <div class="modal-dialog modal-md">
-                    <div class="modal-content"><!---content--->
+                    <div class="modal-content"><!---content-->
                         <div class="modal-header">
                             <button type="button" class="close"   data-dismiss="modal" aria-hidden="true">X</button>
                             <h4 class="modal-title"><span id="modal_mode"> </span>New Unit Group</h4>
@@ -676,13 +704,13 @@
                             <button id="btn_create_unit_group" type="button" class="btn btn-primary"  style="text-transform: capitalize;font-family: Tahoma, Georgia, Serif;"><span class=""></span> Create</button>
                             <button id="btn_close_unit_group" type="button" class="btn btn-default" data-dismiss="modal" style="text-transform: capitalize;font-family: Tahoma, Georgia, Serif;">Cancel</button>
                         </div>
-                    </div><!---content---->
+                    </div><!---content-->
                 </div>
             </div><!---modal-->
 
             <div id="modal_vendor_group" class="modal fade" tabindex="-1" role="dialog"><!--modal-->
                 <div class="modal-dialog modal-md">
-                    <div class="modal-content"><!---content--->
+                    <div class="modal-content"><!---content-->
                         <div class="modal-header">
                             <button type="button" class="close"   data-dismiss="modal" aria-hidden="true">X</button>
                             <h4 class="modal-title"><span id="modal_mode"> </span>New Vendor Group</h4>
@@ -716,7 +744,7 @@
                             <button id="btn_create_vendor_group" type="button" class="btn btn-primary"  style="text-transform: capitalize;font-family: Tahoma, Georgia, Serif;"><span class=""></span> Create</button>
                             <button id="btn_close_vendor_group" type="button" class="btn btn-default" data-dismiss="modal" style="text-transform: capitalize;font-family: Tahoma, Georgia, Serif;">Cancel</button>
                         </div>
-                    </div><!---content---->
+                    </div><!---content-->
                 </div>
             </div><!---modal-->         
 
@@ -773,7 +801,11 @@
 <script>
 
 $(document).ready(function(){
-    var dt; var _txnMode; var _selectedID; var _selectRowObj;
+    var dt; 
+    var _txnMode; 
+    var _selectedID; 
+    var _selectRowObj;
+    var _addedIngredientsID = [];
 
     var initializeControls=function(){
         dt=$('#tbl_products').DataTable({
@@ -817,8 +849,6 @@ $(document).ready(function(){
         });
 
         _inventory_type.select2('val', null);
-
-
         
         _product_category=$("#product_category").select2({
             placeholder: "Category",
@@ -892,15 +922,13 @@ $(document).ready(function(){
                 $('#modal_vendor_group').modal('show');
                 clearFields($('#modal_vendor_group').find('form'));
             }
-
-
         });
 
         $('.numeric').autoNumeric('init');
 
         var createToolBarButton=function(){
             var _btnNew='<button class="btn btn-primary"  id="btn_new" style="text-transform: capitalize;font-family: Tahoma, Georgia, Serif;" data-toggle="modal" data-target="" data-placement="left" title="Create New product" >'+
-                '<i class="fa fa-file"></i> Create New product</button>';
+                '<i class="fa fa-file"></i> Add New to Menu</button>';
             $("div.toolbar").html(_btnNew);
         }();
     }();
@@ -963,9 +991,7 @@ $(document).ready(function(){
                 showSpinningProgress(btn);
             });
         }
-
-
-    });
+    }); 
     
     $('#btn_create_brand_group').click(function(){
 
@@ -1068,56 +1094,70 @@ $(document).ready(function(){
             var row = dt.row( tr );
             var idx = $.inArray( tr.attr('id'), detailRows );
 
-            if ( row.child.isShown() ) {
-                tr.removeClass( 'details' );
-                row.child.hide();
+            // if ( row.child.isShown() ) {
+            //     tr.removeClass( 'details' );
+            //     row.child.hide();
 
-                detailRows.splice( idx, 1 );
-            }
-            else {
-                tr.addClass( 'details' );
+            //     detailRows.splice( idx, 1 );
+            // }
+            // else {
+                //tr.addClass( 'details' );
+                _addedIngredientsID = [];
                 var d=row.data();
+                $('#modal_details').modal('show');
                 $.ajax({
                     "dataType":"html",
                     "type":"POST",
-                    "url":"Templates/layout/bin?id="+ d.product_id,
+                    "url":"Templates/layout/products-content?pid="+d.product_id,
                     "beforeSend" : function(){
-                        row.child( '<center><br /><img src="assets/img/loader/ajax-loader-lg.gif" /><br /><br /></center>' ).show();
+                        $('#details_body').html( '<center><br /><img src="assets/img/loader/ajax-loader-lg.gif" /><br /><br /></center>' ).show();
                     }
                 }).done(function(response){
-                    row.child( response ).show();
-
-                    // Add to the 'open' array
-                    if ( idx === -1 ) {
-                        detailRows.push( tr.attr('id') );
-                    }
-
-
+                    $('#details_body').html(response);
+                    reinitializeSelect2($('#cbo_ingredients_'+d.product_id));
+                    // row.child( response ).show();
+                    // // Add to the 'open' array
+                    // if ( idx === -1 ) {
+                    //     detailRows.push( tr.attr('id') );
+                    // }
                 });
-            }
+            // }
         } );
 
-        /*$('#tbl_products tbody').on( 'click', 'tr td.details-control', function () {
-            var tr = $(this).closest('tr');
-            var row = dt.row( tr );
-            var idx = $.inArray( tr.attr('id'), detailRows );
+        $(document).on("click",".btn-save-ingredients", function() {
+            var _productID = $(this).data('product-id');
+            
+            console.log($('#frm_ingredients_' + _productID).serializeArray())
+        });
 
-            if ( row.child.isShown() ) {
-                tr.removeClass( 'details' );
-                row.child.hide();
+        $(document).on('click','.tbl-ingredients tbody .btn_remove_ingredient', function(){
+            $(this).closest('tr').remove();
+        });
 
-                detailRows.splice( idx, 1 );
+        $(document).on("select2:select",".cbo-ingredient", function(event) {
+            if ($('#tbl_ingredients_'+$(this).data('id')+' tbody tr').length == 0)  
+                $('#tbl_ingredients_'+$(this).data('id')+' tbody').html('');
+            console.log($('.cbo-ingredient option:selected').val() + ' ' + _addedIngredientsID)
+            var index = $.inArray($('.cbo-ingredient option:selected').val(), _addedIngredientsID);
+
+            if (index >= 0) {
+                event.preventDefault();
+            } else {
+                $('#tbl_ingredients_'+$(this).data('id')).append(
+                    '<tr>' +
+                        '<td class="hidden"><input type="hidden" name="ingredient_id" class="form-control" value="'+$('.cbo-ingredient option:selected').val()+'">'+$('.cbo-ingredient option:selected').val()+'</td>' +
+                        '<td><input type="hidden" class="form-control" value="'+$('.cbo-ingredient option:selected').data('ingredient-name')+'">'+$('.cbo-ingredient option:selected').data('ingredient-name')+'</td>' +
+                        '<td><center><input style="width:100%;" type="number" class="form-control text-center" name="ingredient_amount" value="0"></center></td>' +
+                        '<td><input type="hidden" class="form-control" value="'+$('.cbo-ingredient option:selected').data('ingredient-unit')+'">'+$('.cbo-ingredient option:selected').data('ingredient-unit')+'</td>' +
+                        '<td><center><button type="button" class="btn btn-danger btn-delete btn_remove_ingredient"><i class="fa fa-times"></i></button></center></td>' +
+                    '</tr>'
+                );
             }
-            else {
-                tr.addClass( 'details' );
 
-                row.child( format( row.data() ) ).show();
+            _addedIngredientsID.push(parseInt($('.cbo-ingredient option:selected').val()));
 
-                if ( idx === -1 ) {
-                    detailRows.push( tr.attr('id') );
-                }
-            }
-        } );*/
+        
+        });
 
         $('#btn_new').click(function(){
             clearFields($('#frm_product'))
@@ -1151,10 +1191,6 @@ $(document).ready(function(){
             $('#product_unit').select2('val',data.unit_id);
             $('#product_vendor').select2('val',data.vendor_id);
             $('button').prop('disabled',false);
-
-           // alert($('input[name="tax_exempt"]').length);
-            //$('input[name="tax_exempt"]').val(0);
-            //$('input[name="inventory"]').val(data.is_inventory);
 
             $('img[name="img_path"]').attr('src', data.img_path);
 
@@ -1246,6 +1282,21 @@ $(document).ready(function(){
         });
     })();
 
+    var reinitializeSelect2=function(combobox) {
+        combobox.select2({
+            placeholder: "Please select Ingredient",
+            allowClear: true
+        });
+        combobox.select2('val',null);
+    };
+
+    var reinitializeDataTable = function(table) {
+        table.DataTable({
+            "bLengthChange":false,
+            "bFilter": false, 
+            "bInfo": false
+        });
+    };
 
     var validateRequiredFields=function(f){
         var stat=true;
@@ -1270,9 +1321,6 @@ $(document).ready(function(){
                     return false;
                 }
             }
-
-
-
         });
 
         return stat;
@@ -1334,14 +1382,14 @@ $(document).ready(function(){
         });
     };
 
-        $('.date-picker').datepicker({
-            todayBtn: "linked",
-            keyboardNavigation: false,
-            forceParse: false,
-            calendarWeeks: true,
-            autoclose: true
+    $('.date-picker').datepicker({
+        todayBtn: "linked",
+        keyboardNavigation: false,
+        forceParse: false,
+        calendarWeeks: true,
+        autoclose: true
 
-        });
+    });
     
     var showSpinningProgress=function(e){
         $(e).find('span').toggleClass('glyphicon glyphicon-refresh spinning');
@@ -1353,59 +1401,6 @@ $(document).ready(function(){
         $(f).find('select').select2('val',null);
         $(f).find('input:first').focus();
     };
-
-    function format ( d ) {
-        return '<br /><table style="margin-left:10%;width: 80%;">' +
-        '<thead>' +
-        '</thead>' +
-        '<tbody>' +
-
-        '<tr>' +
-        '<td width="20%">Product Code : </td><td width="50%"><b>'+ d.product_code+'</b></td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td>Product Description 1 : </td><td>'+ d.product_desc+'</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td>inventory name : </td><td>'+ d.inventory_type+'</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td>Category : </td><td>'+ d.category_name+'</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td>Brand : </td><td>'+ d.brand_name+'</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td>Unit : </td><td>'+ d.unit_name+'</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td>Vendor : </td><td>'+ d.vendor_name+'</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td>SRP : </td><td>'+ d.sale_cost+'</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td>Purchase Cost : </td><td>'+ d.purchase_cost+'</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td>Tax Rate : </td><td>'+ d.tax_rate+'</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td>Markup Percent : </td><td>'+ d.markup_percent+'</td>' +
-        '</tr>' +
-        '</tbody></table><br />';
-    };
-
-
-
-   /* $('.i-checks').iCheck({
-        checkboxClass: 'icheckbox_square-green',
-        radioClass: 'iradio_square-green',
-    });*/
-
-
-    // apply input changes, which were done outside the plugin
-    //$('input:radio').iCheck('update');
 
 });
 
