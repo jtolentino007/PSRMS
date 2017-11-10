@@ -126,8 +126,8 @@
                                         </div>
                                         <div class="col-xs-12 col-sm-12">
                                             <a href="products" class="btn btn-success btn-block btn-height <?php echo (in_array('1-14', $this->session->user_rights) ? '' : 'hidden') ?>" style="background: #e67e22!important; border-color: #e67e22!important;"><br>
-                                                <i class="fa fa-archive" style="font-size: 50px;"></i><br><br>
-                                                <span>PRODUCTS</span>
+                                                <i class="fa fa-map-o" style="font-size: 50px;"></i><br><br>
+                                                <span>MENU</span>
                                             </a>
                                         </div>
                                     </div>
