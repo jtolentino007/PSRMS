@@ -23,12 +23,6 @@
 		margin-top: 7px;
 	}
 
-	tr:hover {
-        background: #607d8b!important;
-        color: white!important;
-        font-weight: 700;
-    }
-
 	.navbar-brand {
 		background:none!important;
 	}
