@@ -25,6 +25,7 @@ class Templates extends CORE_Controller {
         $this->load->model('Pos_items_ajax_model');
         $this->load->model('Pos_items_model');
         $this->load->model('Pos_invoice_server_model');
+        $this->load->model('Ingredients_model');
     }
 
     public function index() {
@@ -46,7 +47,7 @@ class Templates extends CORE_Controller {
                             $pdf->setFooter('{PAGENO}');
                             $pdf->WriteHTML($content);
                             //download it.
-                            $pdf->Output($pdfFilePath,"D");
+                            $pdf->Output($pdfFilePath,"D"); 
 
 
 
@@ -747,11 +748,23 @@ class Templates extends CORE_Controller {
                 break;
 
             case 'bin':
-                        $m_product=$this->Products_model;
-                        $products=$m_product->get_list($filter_value);
-                        $data['products']=$products[0];
-                        echo $this->load->view('template/bin',$data,TRUE);
-                        break;
+                $m_product=$this->Products_model;
+                $products=$m_product->get_list($filter_value);
+                $data['products']=$products[0];
+                echo $this->load->view('template/bin',$data,TRUE);
+                break;
+
+            case 'products-content':
+                $data['product_id'] = $this->input->get('pid',TRUE);
+                $data['ingredients'] = $this->Ingredients_model->get_list(
+                    'ingredients.is_deleted=FALSE',
+                    'ingredients.*, units.unit_name',
+                    array(
+                        array('units','units.unit_id = ingredients.ingredient_unit','left')
+                    )
+                );
+                echo $this->load->view('template/content_child',$data,TRUE);
+                break;
 
             case 'test': //delivery invoice
                         $m_invoice=$this->Pos_payment_model;
@@ -769,22 +782,21 @@ class Templates extends CORE_Controller {
                             )
                         );
 
-$query1 = $this->db->query('SELECT pos_payment.*,pos_invoice.total_after_tax,pos_payment.receipt_no,pos_invoice.*,pos_invoice_items.*,products.product_desc
-                            FROM pos_payment
-                            LEFT JOIN pos_invoice
-                            ON pos_payment.pos_invoice_id=pos_invoice.pos_invoice_id
-                            LEFT JOIN pos_invoice_items
-                            ON pos_payment.pos_invoice_id=pos_invoice_items.pos_invoice_id
-                            LEFT JOIN products
-                            ON pos_invoice_items.product_id=products.product_id WHERE receipt_no="T1-00024"');
-$total = $this->db->query('SELECT SUM(total_after_tax) as grandtotal
-                            FROM pos_invoice');
+                        $query1 = $this->db->query('SELECT pos_payment.*,pos_invoice.total_after_tax,pos_payment.receipt_no,pos_invoice.*,pos_invoice_items.*,products.product_desc
+                        FROM pos_payment
+                        LEFT JOIN pos_invoice
+                        ON pos_payment.pos_invoice_id=pos_invoice.pos_invoice_id
+                        LEFT JOIN pos_invoice_items
+                        ON pos_payment.pos_invoice_id=pos_invoice_items.pos_invoice_id
+                        LEFT JOIN products
+                        ON pos_invoice_items.product_id=products.product_id WHERE receipt_no="T1-00024"');
+                        $total = $this->db->query('SELECT SUM(total_after_tax) as grandtotal
+                                                    FROM pos_invoice');
 
-
-$data['info']=$query1->result();
-$grand = $total->row(0);
-$data['grand'] = $grand->grandtotal;
-echo json_encode($data);
+                        $data['info']=$query1->result();
+                        $grand = $total->row(0);
+                        $data['grand'] = $grand->grandtotal;
+                        echo json_encode($data);
                         //show only inside grid with menu button
                         if($type=='fullview'||$type==null){
                             echo $this->load->view('template/dailyreports_content',$data,TRUE);
