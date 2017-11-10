@@ -1108,7 +1108,7 @@ $(document).ready(function(){
                 $.ajax({
                     "dataType":"html",
                     "type":"POST",
-                    "url":"Templates/layout/products-content?pid="+d.product_id,
+                    "url":"Templates/layout/products-content?pid="+d.product_id+"&pn="+d.product_desc,
                     "beforeSend" : function(){
                         $('#details_body').html( '<center><br /><img src="assets/img/loader/ajax-loader-lg.gif" /><br /><br /></center>' ).show();
                     }
@@ -1126,8 +1126,20 @@ $(document).ready(function(){
 
         $(document).on("click",".btn-save-ingredients", function() {
             var _productID = $(this).data('product-id');
-            
-            console.log($('#frm_ingredients_' + _productID).serializeArray())
+            var data = $('#frm_ingredients_' + _productID).serializeArray();
+            data.push({ name: 'product_id', value: _productID });
+
+            if(validateRequiredFields($('#frm_ingredients_'+_productID))) {
+                $.ajax({
+                    "dataType":"json",
+                    "type":"POST",
+                    "url":"Products/transaction/add-product-ingredients",
+                    "data" : data,
+                }).done(function(response){
+                    showNotification(response);
+                    $('#modal_details').modal('hide');
+                });
+            }
         });
 
         $(document).on('click','.tbl-ingredients tbody .btn_remove_ingredient', function(){
@@ -1137,25 +1149,30 @@ $(document).ready(function(){
         $(document).on("select2:select",".cbo-ingredient", function(event) {
             if ($('#tbl_ingredients_'+$(this).data('id')+' tbody tr').length == 0)  
                 $('#tbl_ingredients_'+$(this).data('id')+' tbody').html('');
-            console.log($('.cbo-ingredient option:selected').val() + ' ' + _addedIngredientsID)
-            var index = $.inArray($('.cbo-ingredient option:selected').val(), _addedIngredientsID);
 
-            if (index >= 0) {
-                event.preventDefault();
+            if ($(this).val() == "0") {
+                alert('')
             } else {
-                $('#tbl_ingredients_'+$(this).data('id')).append(
-                    '<tr>' +
-                        '<td class="hidden"><input type="hidden" name="ingredient_id" class="form-control" value="'+$('.cbo-ingredient option:selected').val()+'">'+$('.cbo-ingredient option:selected').val()+'</td>' +
-                        '<td><input type="hidden" class="form-control" value="'+$('.cbo-ingredient option:selected').data('ingredient-name')+'">'+$('.cbo-ingredient option:selected').data('ingredient-name')+'</td>' +
-                        '<td><center><input style="width:100%;" type="number" class="form-control text-center" name="ingredient_amount" value="0"></center></td>' +
-                        '<td><input type="hidden" class="form-control" value="'+$('.cbo-ingredient option:selected').data('ingredient-unit')+'">'+$('.cbo-ingredient option:selected').data('ingredient-unit')+'</td>' +
-                        '<td><center><button type="button" class="btn btn-danger btn-delete btn_remove_ingredient"><i class="fa fa-times"></i></button></center></td>' +
-                    '</tr>'
-                );
-            }
+                var index = $.inArray($('.cbo-ingredient option:selected').val(), _addedIngredientsID);
 
-            _addedIngredientsID.push(parseInt($('.cbo-ingredient option:selected').val()));
+                if (index >= 0) {
+                    event.preventDefault();
+                } else {
+                    $('#tbl_ingredients_'+$(this).data('id')).append(
+                        '<tr>' +
+                            '<td class="hidden"><input type="hidden" name="ingredient_id[]" class="form-control" value="'+$('.cbo-ingredient option:selected').val()+'">'+$('.cbo-ingredient option:selected').val()+'</td>' +
+                            '<td><input type="hidden" class="form-control" value="'+$('.cbo-ingredient option:selected').data('ingredient-name')+'">'+$('.cbo-ingredient option:selected').data('ingredient-name')+'</td>' +
+                            '<td><center><input style="width:100%;" type="number" class="form-control text-center" name="ingredient_amount[]" data-error-msg="Ingredient amount cannot be zero." value="0" required></center></td>' +
+                            '<td><input type="hidden" class="form-control" value="'+$('.cbo-ingredient option:selected').data('ingredient-unit')+'">'+$('.cbo-ingredient option:selected').data('ingredient-unit')+'</td>' +
+                            '<td><center><button type="button" class="btn btn-danger btn-delete btn_remove_ingredient"><i class="fa fa-times"></i></button></center></td>' +
+                        '</tr>'
+                    );
 
+                    _addedIngredientsID.push($('.cbo-ingredient option:selected').val());
+                }
+
+                $(".cbo-ingredient").select2('val',null);
+                }
         
         });
 
@@ -1302,7 +1319,7 @@ $(document).ready(function(){
         var stat=true;
 
         $('div.form-group').removeClass('has-error');
-        $('input[required],textarea[required],select[required]',f).each(function(){
+        $('input[required],textarea[required],select[required],input[type="number"][required]',f).each(function(){
 
             if($(this).is('select')){
                 if($(this).select2('val')==0||$(this).select2('val')==null){
@@ -1313,7 +1330,7 @@ $(document).ready(function(){
                     return false;
                 }
             }else{
-                if($(this).val()==""){
+                if($(this).val()=="" || $(this).val() == 0 || $(this).val() == '0'){
                     showNotification({title:"Error!",stat:"error",msg:$(this).data('error-msg')});
                     $(this).closest('div.form-group').addClass('has-error');
                     $(this).focus();

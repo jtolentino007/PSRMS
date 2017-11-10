@@ -11,7 +11,7 @@
 
 <div class="tab-content" style="border: 1px solid #ddd; border-top: none; padding: 10px;">
   <div id="recipe" class="tab-pane fade in active">
-    <span style="font-size: 20px; font-weight: 700;">ADD INGREDIENTS TO RECIPE</span><br><small><i>Please add Ingredients for this recipe.</i></small><hr>
+    <span style="font-size: 20px; font-weight: 700;">ADD INGREDIENTS TO <?php echo $product_name; ?></span><br><small><i>Please add Ingredients for this recipe.</i></small><hr>
     <div class="row">
     	<div class="container-fluid">
     		<label><b>Select or Search Ingredient(s) :</b></label>
@@ -34,6 +34,15 @@
 	    				<th><center>Action</center></th>
 	    			</thead>
 	    			<tbody>
+              <?php foreach ($products as $product) { ?>
+                <tr>
+                    <td class="hidden"><input type="hidden" name="ingredient_id[]" class="form-control" value="<?php echo $product->ingredient_id; ?>"><?php echo $product->ingredient_id; ?></td>
+                    <td><input type="hidden" class="form-control" value="<?php echo $product->ingredient_name; ?>"><?php echo $product->ingredient_name; ?></td>
+                    <td><center><input style="width:100%;" type="number" class="form-control text-center" name="ingredient_amount[]" data-error-msg="Ingredient amount cannot be zero." value="<?php echo number_format($product->qty_per_order); ?>" required></center></td>
+                    <td><input type="hidden" class="form-control" value="<?php echo $product->unit_name; ?>"><?php echo $product->unit_name; ?></td>
+                    <td><center><button type="button" class="btn btn-danger btn-delete btn_remove_ingredient"><i class="fa fa-times"></i></button></center></td>
+                </tr>
+              <?php } ?>
 	    			</tbody>
 	    		</table>
     		</form>

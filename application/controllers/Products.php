@@ -13,6 +13,7 @@ class Products extends CORE_Controller
 		$this->load->model('Inventory_model');
 		$this->load->model('Brands_model');
 		$this->load->model('Vendors_model');
+        $this->load->model('Recipes_model');
     }
 
     public function index() {
@@ -40,6 +41,30 @@ class Products extends CORE_Controller
                 echo json_encode($response);
                 break;
 
+            case 'add-product-ingredients':
+                $m_recipe = $this->Recipes_model;
+
+                $product_id = $this->input->post('product_id',TRUE);
+                $ingredient_id = $this->input->post('ingredient_id',TRUE);
+                $qty_per_order = $this->input->post('ingredient_amount',TRUE);
+
+                $m_recipe->delete_via_fk($product_id);
+
+                for($i=0;$i<count($ingredient_id);$i++)
+                {
+                    $m_recipe->product_id = $product_id;
+                    $m_recipe->ingredient_id = $ingredient_id[$i];
+                    $m_recipe->qty_per_order = $qty_per_order[$i];
+                    $m_recipe->save();
+                }
+
+                $response['title'] = "Notification";
+                $response['stat'] = "success";
+                $response['msg'] = "Recipes successfully saved.";
+
+                echo json_encode($response);
+                break;
+
             case 'create':
                 $m_products = $this->Products_model;
                 
@@ -59,7 +84,6 @@ class Products extends CORE_Controller
 				$m_products->quantity =$this->get_numeric_value($this->input->post('quantity', TRUE));
                 $m_products->purchase_cost =$this->get_numeric_value($this->input->post('purchase_cost', TRUE));
 				$m_products->tax_rate =$this->get_numeric_value($this->input->post('tax_rate', TRUE));
-
 
                 $m_products->save();
 
