@@ -37,6 +37,9 @@
 		                                                        <th>Ingredients</th>
 		                                                        <th>Unit</th>
 		                                                        <th>Category</th>
+		                                                        <th>Ideal Qty</th>
+		                                                        <th>Warning Qty</th>
+		                                                        <th>Cost</th>
 		                                                        <th>Action</th>
 		                                                    </tr>
 	                                                    </thead>
@@ -125,6 +128,18 @@
 								        				<option value="<?php echo $category->ingredient_category_id; ?>"><?php echo $category->ingredient_category_name; ?></option>
 								        			<?php } ?>
 								        		</select>
+								        		<label>
+								        			<strong>* Ideal Quantity</strong>
+								        		</label>
+								        		<input type="number" name="ideal_qty" class="form-control" value="0.00">
+								        		<label>
+								        			<strong>* Warning Quantity</strong>
+								        		</label>
+								        		<input type="number" name="warning_qty" class="form-control" value="0.00">
+								        		<label>
+								        			<strong>* Cost</strong>
+								        		</label>
+								        		<input type="number" name="ingredient_cost" class="form-control" value="0.00">
 							        		</form>
 							        	</div>
 							        </div>
@@ -209,6 +224,10 @@
 	<script src="assets/plugins/spinner/dist/spin.min.js"></script>
 	<script src="assets/plugins/spinner/dist/ladda.min.js"></script>
 
+	<!-- numeric formatter -->
+    <script src="assets/plugins/formatter/autoNumeric.js" type="text/javascript"></script>
+    <script src="assets/plugins/formatter/accounting.js" type="text/javascript"></script>
+
 	<script type="text/javascript" src="assets/plugins/datatables/jquery.dataTables.js"></script>
 	<script type="text/javascript" src="assets/plugins/datatables/dataTables.bootstrap.js"></script>
 	<!-- Select2 -->
@@ -245,8 +264,32 @@
 		                	} 
 		                },
 		                {
+		                	class: 'text-right',
+		                	targets:[3],
+		                	data: "ideal_qty",
+		                	render: function(data, type, full, meta) {
+		                		return accounting.formatNumber(data, 2);
+		                	}
+		                },
+		                {
+		                	class: 'text-right',
+		                	targets:[4],
+		                	data: "warning_qty",
+		                	render: function(data, type, full, meta) {
+		                		return accounting.formatNumber(data, 2);
+		                	}
+		                },
+		                {
+		                	class: 'text-right',
+		                	targets:[5],
+		                	data: "ingredient_cost",
+		                	render: function(data, type, full, meta) {
+		                		return accounting.formatNumber(data, 2);
+		                	}
+		                },
+		                {
 		                	class: 'text-center',
-		                    targets:[3],
+		                    targets:[6],
 		                    render: function (data, type, full, meta){
 		                        var btn_edit='<button class="btn btn-primary btn-sm" name="edit_info"  style="margin-left:-15px;" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i> </button>';
 		                        var btn_trash='<button class="btn btn-danger btn-sm" name="remove_info" style="margin-right:0px;" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> </button>';
