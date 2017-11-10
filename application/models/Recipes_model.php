@@ -3,6 +3,7 @@
 	{
 		protected $table="recipes";
 		protected $pk_id="recipe_id";
+		protected $fk_id="product_id";
 		
 		function __construct()
 		{

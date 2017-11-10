@@ -26,6 +26,7 @@ class Templates extends CORE_Controller {
         $this->load->model('Pos_items_model');
         $this->load->model('Pos_invoice_server_model');
         $this->load->model('Ingredients_model');
+        $this->load->model('Recipes_model');
     }
 
     public function index() {
@@ -756,11 +757,27 @@ class Templates extends CORE_Controller {
 
             case 'products-content':
                 $data['product_id'] = $this->input->get('pid',TRUE);
+                $data['product_name'] = $this->input->get('pn',TRUE);
                 $data['ingredients'] = $this->Ingredients_model->get_list(
                     'ingredients.is_deleted=FALSE',
                     'ingredients.*, units.unit_name',
                     array(
                         array('units','units.unit_id = ingredients.ingredient_unit','left')
+                    )
+                );
+
+                $data['products'] = $this->Recipes_model->get_list(
+                    'recipes.product_id = '.$this->input->get('pid',TRUE),
+                    'products.*,
+                    ingredients.ingredient_name,
+                    ingredients_categories.ingredient_category_name,
+                    units.unit_name,
+                    recipes.*',
+                    array(
+                        array('ingredients','ingredients.ingredient_id = recipes.ingredient_id','left'),
+                        array('ingredients_categories','ingredients_categories.ingredient_category_id = ingredients.ingredient_category_id','left'),
+                        array('units','units.unit_id = ingredients.ingredient_unit','left'),
+                        array('products','products.product_id = recipes.product_id','left')
                     )
                 );
                 echo $this->load->view('template/content_child',$data,TRUE);
