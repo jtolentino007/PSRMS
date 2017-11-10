@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Point of Sales</title>
+	<title>Point of Sale</title>
 	<?php echo $_def_css_files; ?>
 	<?php echo $_def_js_files; ?>
     <style type="text/css">
@@ -95,6 +95,11 @@
 		  -webkit-appearance: none;
 		  margin: 0;
 		}
+
+        #modal_login {
+            z-index: 9999999999999999999999;
+        }
+
     </style>
 
 
@@ -118,7 +123,7 @@
                             <div class="row">
                                 <div class="container-fluid">
                                     <div class="col-xs-12 col-sm-6">
-                                        <h1 style="font-weight: 400;"><i class="fa fa-fax" style="color: #ff9800;"></i> POINT OF SALES<br><small id="cashier_name" style="text-transform: uppercase;"> <strong><?php echo $user_groups->user_group; ?></strong> : <?php echo $user_name; ?></small></h1>
+                                        <h1 style="font-weight: 400;"><i class="fa fa-fax" style="color: #ff9800;"></i> POINT OF SALE<br><small id="cashier_name" style="text-transform: uppercase;"> <strong><?php echo $user_groups->user_group; ?></strong> : <?php echo $user_name; ?></small></h1>
                                     </div>
                                     <div class="col-xs-12 col-sm-6">
                                         <button id="btn_logout" class="btn btn-warning pull-right <?php echo ($this->session->user_group_id != 1 ? '' : 'hidden') ?>" style="margin-top: 10px; padding: 15px 30px;">
@@ -368,7 +373,7 @@
                                             <button id="btn_login" type="button" class="btn btn-primary btn-block" style="font-size: 25px;">LOGIN</button>
                                         </div>
                                         <div class="col-xs-12 col-sm-6">
-                                            <button type="button" class="btn btn-danger btn-block" data-dismiss="modal" style="font-size: 25px;">CLOSE</button>
+                                            <button type="button" id="btn_close" class="btn btn-danger btn-block" data-dismiss="modal" style="font-size: 25px;">CLOSE</button>
                                         </div>
                                     </div>
                                 </div>
@@ -668,6 +673,41 @@
                                                     </button>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div id="modal_manager_login" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+                          <div class="modal-dialog modal-md">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                              <div class="modal-header text-center">
+                                <h4 class="modal-title" style="font-weight: 400;">MANAGER LOGIN</h4>
+                              </div>
+                              <div class="modal-body">
+                                <form class="form-horizontal" id="validate-form">
+                                <div class="row">
+                                    <div class="container-fluid">
+                                        <label>USERNAME :</label>
+                                        <input name="user_manager_name" type="text" class="form-control form-input" placeholder="Username" data-parsley-minlength="20" placeholder="At least 6 characters" required><br>
+                                        <label>PASSWORD :</label>
+                                        <input name="user_manager_pword" type="password" class="form-control form-input" id="exampleInputPassword1" placeholder="Password"><br>
+                                    </div>
+                                </div>
+                                </form>
+                              </div>
+                              <div class="modal-footer">
+                                <div class="row">
+                                    <div class="container-fluid">
+                                        <div class="col-xs-12 col-sm-6">
+                                            <button id="btn_manager_login" type="button" class="btn btn-primary btn-block" style="font-size: 25px;">LOGIN</button>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
+                                            <button type="button" id="btn_manager_close" class="btn btn-danger btn-block" data-dismiss="modal" style="font-size: 25px;">CLOSE</button>
                                         </div>
                                     </div>
                                 </div>
@@ -982,6 +1022,10 @@
                                         '</button>&nbsp;'+
                                         '<button id="btn_pay_order" class="btn btn-warning" style="border-radius:0; padding: 12px 25px 12px 25px;" data-inv-id="'+value.pos_invoice_id+'" data-amount-due="'+value.total_after_tax+'">'+
                                             '<b>BILL OUT</b>'+
+                                        '</button>&nbsp;'+
+                                        // ADDED DELETE BUTTON 11/10/2017
+                                        '<button id="btn_delete_order" class="btn btn-danger" style="border-radius:0; padding: 12px 25px 12px 25px;" data-inv-id="'+value.pos_invoice_id+'" data-amount-due="'+value.total_after_tax+'">'+
+                                            '<b>DELETE</b>'+
                                         '</button>'+
                                     '</center>'+
                                 '</td>' +
@@ -1097,13 +1141,13 @@
                                         '<input class="text-center form-control" type="text" value="'+value.product_id+'" name="product_id[]">'+
                                     '</td>' +
 									'<td width="15%" style="vertical-align: middle;">' +
-		                                '<div class="input-group">' + ' <span class="input-group-btn">' +
+		                                /*'<div class="input-group">' + ' <span class="input-group-btn">' +
 		                                    '<button id="btn_add" class="btn btn-primary btn-sm" type="button" style="border-radius: 50%;" disabled><i class="fa fa-plus"></i></button>' +
-		                                  '</span>' +
+		                                  '</span>' +*/
 		                                  	'<input type="number" class="form-control text-center" name="pos_qty[]" value="'+value.pos_qty+'" style="border: 1px solid #ddd!important; height: 31px;" readonly />' +
-		                                 ' <span class="input-group-btn">' +
+		                                 /*' <span class="input-group-btn">' +
 		                                    '<button id="btn_minus" class="btn btn-warning btn-sm" type="button" style="border-radius: 50%;"><i class="fa fa-minus"></i></button>' +
-		                                  '</span>' +
+		                                  '</span>' +*/
 		                               ' </div>' +
 		                            '</td>' +
                                     '<td width="20%" style="vertical-align: middle;">'+
@@ -1466,7 +1510,7 @@
             });
 
             $('#btn_login').on('click', function(){
-                validateUser().done(function(response){
+                validateUserVoid().done(function(response){
                     if(response.stat=="success"){
                         if (_billOutStatus == "off") {
                            $('.btn-remove').removeAttr('disabled');
@@ -1700,6 +1744,38 @@
                 InsertProducts();
             });
 
+
+
+
+
+            // DELETE BUTTON IN UNPAID ORDERS JQUERY
+            $('#tbl_unpaid').on('click','#btn_delete_order',function(){
+                $('.modal-title').html('MANAGER LOGIN');
+                $('#modal_manager_login').modal('toggle');
+                //alert('sdfdsfsdf');
+            });
+
+            $('#modal_manager_login').on('click','#btn_manager_close',function(){
+                $('.modal-title').html('UNPAID ORDERS');
+            });
+
+            $('#modal_manager_login').on('click','#btn_manager_login',function(){
+                validateUser().done(function(response){
+                    if(response.stat=="success"){
+                        showNotification(response);
+                        $('.modal-title').html('UNPAID ORDERS');
+                        $('#modal_manager_login').modal('hide');
+                        clearFields();
+                    } else {
+                        showNotification(response);
+
+                    }
+                });
+            });
+            ///////////////////////////////////////////////////////////
+
+
+
             var AppendProductToTable = function(product_id, prod_desc, pos_price, pos_discount, prod_tax, tax_amount, total, vendor_id) {
                 var td_productCode = product_id;
                 var index = $.inArray(td_productCode, addedProductCodes);
@@ -1720,13 +1796,13 @@
                             '</td>' +
                             '<td width="15%" style="vertical-align: middle;">' +
                                 '<div class="input-group">' +
-                                 ' <span class="input-group-btn">' +
+                                 /*' <span class="input-group-btn">' +
                                     '<button id="btn_add" class="btn btn-primary btn-sm" type="button" style="border-radius: 50%;"><i class="fa fa-plus"></i></button>' +
-                                  '</span>' +
+                                  '</span>' +*/
                                   	'<input type="number" class="form-control text-center" name="pos_qty[]" value="1" style="border: 1px solid #ddd!important; height: 31px;" readonly />' +
-                                 ' <span class="input-group-btn">' +
+                                 /*' <span class="input-group-btn">' +
                                     '<button id="btn_minus" class="btn btn-warning btn-sm" type="button" style="border-radius: 50%;"><i class="fa fa-minus"></i></button>' +
-                                  '</span>' +
+                                  '</span>' +*/
                                ' </div>' +
                             '</td>' +
                             '<td width="20%" style="vertical-align: middle;">'+
@@ -1779,13 +1855,13 @@
                             '</td>' +
                             '<td width="15%" style="vertical-align: middle;">' +
                                 '<div class="input-group">' +
-                                 ' <span class="input-group-btn">' +
+                                 /*' <span class="input-group-btn">' +
                                     '<button id="btn_add" class="btn btn-primary btn-sm" type="button" style="border-radius: 50%;"><i class="fa fa-plus"></i></button>' +
-                                  '</span>' +
+                                  '</span>' +*/
                                     '<input type="number" class="form-control text-center" name="pos_qty[]" value="1" style="border: 1px solid #ddd!important; height: 31px;" readonly />' +
-                                 ' <span class="input-group-btn">' +
+                                 /*' <span class="input-group-btn">' +
                                     '<button id="btn_minus" class="btn btn-warning btn-sm" type="button" style="border-radius: 50%;"><i class="fa fa-minus"></i></button>' +
-                                  '</span>' +
+                                  '</span>' +*/
                                ' </div>' +
                             '</td>' +
                             '<td width="20%" style="vertical-align: middle;">'+
@@ -1821,8 +1897,22 @@
                 }
             };
 
-            var validateUser=function(){
+            var validateUserVoid=function(){
                 var _data={uname : $('input[name="user_name"]').val() , pword : $('input[name="user_pword"]').val()};
+
+                return $.ajax({
+                    "dataType":"json",
+                    "type":"POST",
+                    "url":"Login/transaction/validatevoid",
+                    "data" : _data,
+                    "beforeSend": function(){
+
+                    }
+                });
+            };
+
+            var validateUser=function(){
+                var _data={uname : $('input[name="user_manager_name"]').val() , pword : $('input[name="user_manager_pword"]').val()};
 
                 return $.ajax({
                     "dataType":"json",
