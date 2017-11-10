@@ -4,7 +4,7 @@
 <!-- Mirrored from avenxo.kaijuthemes.com/ui-typography.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 06 Jun 2016 12:09:25 GMT -->
 <head>
     <meta charset="utf-8">
-    <title>Point of Sales</title>
+    <title>Ordering Management</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -83,7 +83,7 @@
                     <div class="row">
                         <div class="container-fluid">
                             <div class="col-xs-12 col-sm-6">
-                                <h1 style="margin-left: 20px; font-weight: 700; font-family: 'Trebuchet MS', Helvetica, sans-serif;text-shadow: 2px 2px 4px #afafaf;"><span style="font-size: 50px;">P</span>OINT OF <span style="font-size: 50px;">S</span>ALES <small style="color: #ff9800;">ADMINISTRATION v1.8</small></h1>
+                                <h1 style="margin-left: 20px; font-weight: 700; font-family: 'Trebuchet MS', Helvetica, sans-serif;text-shadow: 2px 2px 4px #afafaf;"><span style="font-size: 50px;">O</span>RDERING <span style="font-size: 50px;">M</span>ANAGEMENT <small style="color: #ff9800;">ADMINISTRATION v1.8</small></h1>
                             </div>
                             <div class="col-xs-12 col-sm-6 text-right" style="padding-top: 10px;">
                                 <a id="btn_logout" href="Login/transaction/logout" class="btn btn-primary" style="border-radius: 50%;padding: 15px 20px;">
@@ -151,12 +151,12 @@
                                                 <span>ISSUANCE</span>
                                             </a>
                                         </div>
-                                        <div class="col-xs-12 col-sm-12">
+                                        <!-- <div class="col-xs-12 col-sm-12">
                                             <a href="stock" class="btn btn-success btn-block btn-height <?php echo (in_array('1-17', $this->session->user_rights) ? '' : 'hidden') ?>" style="background: #2980b9!important; border-color: #2980b9!important;"><br>
                                                 <i class="fa fa-linode" style="font-size: 50px;"></i><br><br>
                                                 <span>STOCKS</span>
                                             </a>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -289,6 +289,12 @@
                                             <button class="btn btn-primary btn-block btn-height <?php echo (in_array('1-19', $this->session->user_rights) ? '' : 'hidden') ?>" id="btn_z_reading"><br>
                                                 <i class="fa fa-file-o" style="font-size: 50px;"></i><br><br>
                                                 <span>Z-READING</span>
+                                            </a>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4">
+                                            <a href="warehouse" class="btn btn-primary btn-block btn-height <?php echo (in_array('1-18', $this->session->user_rights) ? '' : 'hidden') ?>"><br>
+                                                <i class="fa fa-bank" style="font-size: 50px;"></i><br><br>
+                                                <span>WAREHOUSE REPORT</span>
                                             </a>
                                         </div>
                                     </div>
