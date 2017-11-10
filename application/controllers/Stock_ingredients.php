@@ -1,13 +1,12 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Stock extends CORE_Controller
+class Stock_ingredients extends CORE_Controller
 {
 
     function __construct() {
         parent::__construct('');
         $this->validate_session();
-
         $this->load->model('Delivery_invoice_model');
         $this->load->model('Suppliers_model');
         $this->load->model('Tax_types_model');
@@ -15,6 +14,7 @@ class Stock extends CORE_Controller
         $this->load->model('Delivery_invoice_item_model');
         $this->load->model('Purchases_model');
         $this->load->model('Stock_model');
+        $this->load->model('Ingredients_model');
     }
 
     public function index() {
@@ -37,10 +37,17 @@ class Stock extends CORE_Controller
 
         $data['tax_types']=$this->Tax_types_model->get_list();
 
-        $data['products']=$this->Products_model->get_list();
+        $data['products']=$this->Ingredients_model->get_list(
+        	'ingredients.is_deleted = FALSE',
+        	'ingredients.*, units.unit_name, ingredients_categories.ingredient_category_name',
+        	array(
+        		array('units', 'units.unit_id = ingredients.ingredient_unit','left'),
+        		array('ingredients_categories', 'ingredients_categories.ingredient_category_id = ingredients.ingredient_category_id','left')
+        	)
+        );
 
         $data['title'] = 'Stock Management';
-        $this->load->view('stock_view', $data);
+        $this->load->view('stock_ingredients_view', $data);
 
 
     }
