@@ -165,7 +165,7 @@ class Login extends CORE_Controller {
                         echo json_encode($response);
 
                     }else{ //not valid
-
+                         $response['title']='Authentication Failed';
                         $response['stat']='error';
                         $response['msg']='Invalid username or password.';
                         echo json_encode($response);
