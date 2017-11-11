@@ -126,6 +126,21 @@
 			}
 		}
 
+		public function deleteInvoice()
+		{
+			$pos_invoice_id = $this->input->post('pos_invoice_id');
+
+			$this->db->delete('pos_invoice', array('pos_invoice_id' => $pos_invoice_id));
+			$this->db->delete('pos_invoice_items', array('pos_invoice_id' => $pos_invoice_id));
+			$this->db->delete('order_tables', array('pos_invoice_id' => $pos_invoice_id));
+
+			$response['title'] = "Success";
+			$response['stat'] = "success";
+			$response['msg'] = "Invoice successfully cancelled.";
+
+			echo json_encode($response);
+		}
+
 		public function endBatch()
 		{
 			$m_pos=$this->Pos_model;
@@ -266,6 +281,7 @@
 			$m_payment->pos_invoice_id = $this->get_numeric_value($this->input->post('pos_invoice_id',TRUE));
 			$m_payment->approved_by = $this->get_numeric_value($this->input->post('approved_by',TRUE));
 			$m_payment->set('transaction_date','NOW()');
+			//$m_payment->set('transaction_timestamp','NOW()');
 			$m_payment->save();
 
 			$pos_payment_id = $m_payment->last_insert_id();

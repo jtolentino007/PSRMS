@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Point of Sale</title>
+	<title>Ordering System</title>
 	<?php echo $_def_css_files; ?>
 	<?php echo $_def_js_files; ?>
     <style type="text/css">
@@ -123,7 +123,7 @@
                             <div class="row">
                                 <div class="container-fluid">
                                     <div class="col-xs-12 col-sm-6">
-                                        <h1 style="font-weight: 400;"><i class="fa fa-fax" style="color: #ff9800;"></i> POINT OF SALE<br><small id="cashier_name" style="text-transform: uppercase;"> <strong><?php echo $user_groups->user_group; ?></strong> : <?php echo $user_name; ?></small></h1>
+                                        <h1 style="font-weight: 400;"><i class="fa fa-book" style="color: #ff9800;"></i> ORDERING SYSTEM<br><small id="cashier_name" style="text-transform: uppercase;"> <strong><?php echo $user_groups->user_group; ?></strong> : <?php echo $user_name; ?></small></h1>
                                     </div>
                                     <div class="col-xs-12 col-sm-6">
                                         <button id="btn_logout" class="btn btn-warning pull-right <?php echo ($this->session->user_group_id != 1 ? '' : 'hidden') ?>" style="margin-top: 10px; padding: 15px 30px;">
@@ -354,7 +354,7 @@
                             <!-- Modal content-->
                             <div class="modal-content">
                               <div class="modal-header text-center">
-                                <h4 class="modal-title" style="font-weight: 400;">MANAGER LOGIN</h4>
+                                <h4 class="modal-title" style="font-weight: 400;">LOGIN</h4>
                               </div>
                               <div class="modal-body">
                                 <div class="row">
@@ -374,6 +374,39 @@
                                         </div>
                                         <div class="col-xs-12 col-sm-6">
                                             <button type="button" id="btn_close" class="btn btn-danger btn-block" data-dismiss="modal" style="font-size: 25px;">CLOSE</button>
+                                        </div>
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div id="modal_login_manager" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+                          <div class="modal-dialog modal-md">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                              <div class="modal-header text-center">
+                                <h4 class="modal-title" style="font-weight: 400;">MANAGER LOGIN</h4>
+                              </div>
+                              <div class="modal-body">
+                                <div class="row">
+                                    <div class="container-fluid">
+                                        <label>USERNAME :</label>
+                                        <input name="user_name_manager" type="text" class="form-control form-input" placeholder="Username" data-parsley-minlength="20" placeholder="At least 6 characters" required><br>
+                                        <label>PASSWORD :</label>
+                                        <input name="user_pword_manager" type="password" class="form-control form-input" id="exampleInputPassword1" placeholder="Password"><br>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                <div class="row">
+                                    <div class="container-fluid">
+                                        <div class="col-xs-12 col-sm-6">
+                                            <button id="btn_login_manager" type="button" class="btn btn-primary btn-block" style="font-size: 25px;">LOGIN</button>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
+                                            <button type="button" id="btn_close_manager" class="btn btn-danger btn-block" data-dismiss="modal" style="font-size: 25px;">CLOSE</button>
                                         </div>
                                     </div>
                                 </div>
@@ -424,6 +457,27 @@
                                 </div>
                               </div>
                             </div>
+                          </div>
+                        </div>
+
+                        <div id="modal_confirmation" class="modal fade" role="dialog">
+                          <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Confirmation</h4>
+                              </div>
+                              <div class="modal-body">
+                                <p>Are you sure you want to cancel this invoice?</p>
+                              </div>
+                              <div class="modal-footer">
+                                <button id="btn_yes_cancel" type="button" class="btn btn-primary">Yes</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                              </div>
+                            </div>
+
                           </div>
                         </div>
 
@@ -680,40 +734,6 @@
                             </div>
                           </div>
                         </div>
-
-                        <div id="modal_manager_login" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
-                          <div class="modal-dialog modal-md">
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                              <div class="modal-header text-center">
-                                <h4 class="modal-title" style="font-weight: 400;">MANAGER LOGIN</h4>
-                              </div>
-                              <div class="modal-body">
-                                <form class="form-horizontal" id="validate-form">
-                                <div class="row">
-                                    <div class="container-fluid">
-                                        <label>USERNAME :</label>
-                                        <input name="user_manager_name" type="text" class="form-control form-input" placeholder="Username" data-parsley-minlength="20" placeholder="At least 6 characters" required><br>
-                                        <label>PASSWORD :</label>
-                                        <input name="user_manager_pword" type="password" class="form-control form-input" id="exampleInputPassword1" placeholder="Password"><br>
-                                    </div>
-                                </div>
-                                </form>
-                              </div>
-                              <div class="modal-footer">
-                                <div class="row">
-                                    <div class="container-fluid">
-                                        <div class="col-xs-12 col-sm-6">
-                                            <button id="btn_manager_login" type="button" class="btn btn-primary btn-block" style="font-size: 25px;">LOGIN</button>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-6">
-                                            <button type="button" id="btn_manager_close" class="btn btn-danger btn-block" data-dismiss="modal" style="font-size: 25px;">CLOSE</button>
-                                        </div>
-                                    </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
                         </div>
                     </div>
                 </div>
@@ -761,6 +781,7 @@
             var _btnTotalDiscount = 0;
             var _btnTotalTax = 0;
             var _btnTotalBeforeTax = 0;
+            var _loginMode = 0;
 
             toggleControls(true);
 
@@ -1102,6 +1123,22 @@
                 });
             });
 
+            $('#tbl_unpaid').on('click', '#btn_delete_order', function(){
+                _posInvoiceID = $(this).data('inv-id');
+                $('.modal-title').html('CONFIRMATION');
+                $('#modal_confirmation').modal('show');
+                $('#modal_unpaid').modal('hide');
+            });
+
+            $('#modal_confirmation').on('click', '#btn_yes_cancel', function(){
+                _loginMode = "delete";
+                $('.modal-title').html('LOGIN');
+                $('#modal_login_manager').modal('show');
+                $('input[name="user_name_manager"]').val('');
+                $('input[name="user_pword_manager"]').val('');
+                $('#modal_confirmation').modal('hide');
+            });
+
             $('#tbl_unpaid').on('click', '#btn_edit_order', function(){
                 $.ajax({
                     "dataType":"json",
@@ -1218,7 +1255,10 @@
                 $('#mod_amount_due').html(accounting.formatNumber($(this).data('amount-due'),2));
                 _posInvoiceID = $(this).data('inv-id');
                 $('.form-input').val('');
+                $('.modal-title').html('LOGIN');
                 $('#modal_login').modal('show');
+                $('input[name="user_name"]').val('');
+                $('input[name="user_pword"]').val('');
                 $('#modal_unpaid').modal('hide');
             });
 
@@ -1510,7 +1550,7 @@
             });
 
             $('#btn_login').on('click', function(){
-                validateUserVoid().done(function(response){
+                validateUser().done(function(response){
                     if(response.stat=="success"){
                         if (_billOutStatus == "off") {
                            $('.btn-remove').removeAttr('disabled');
@@ -1523,7 +1563,32 @@
                             $('#modal_login').modal('hide');
                             _globalUserID = response.user_id
                         }
-                       
+                    } else {
+                        showNotification(response);
+                    }
+                });
+            });
+
+            $('#btn_login_manager').on('click', function(){
+                validateUserVoid().done(function(response){
+                    if(response.stat=="success"){
+                        if (_loginMode == "void") {
+                           $('.btn-remove').removeAttr('disabled');
+                           showNotification(response);
+                           $('#btn_void').prop('disabled',true);
+                           $('#modal_login_manager').modal('toggle');
+                        } else {
+                           $.ajax({
+                                "dataType":"json",
+                                "type":"POST",
+                                "url":"Pos_v2/deleteInvoice",
+                                "data": { pos_invoice_id : _posInvoiceID }
+                           }).done(function(response){
+                                showNotification(response);
+                                $('#modal_login_manager').modal('hide');
+                           });
+
+                        }
                     } else {
                         showNotification(response);
                     }
@@ -1548,10 +1613,12 @@
             });
 
             $('#btn_void').on('click', function(){
-                $('.modal-title').html('MANAGER LOGIN');
-                _billOutStatus = "off";
+                $('.modal-title').html('LOGIN');
+                _loginMode = "void";
                 $('.form-input').val('');
-                $('#modal_login').modal('show');
+                $('#modal_login_manager').modal('show');
+                $('input[name="user_name_manager"]').val('');
+                $('input[name="user_pword_manager"]').val('');
                 addedProductCodes = [];
             });
 
@@ -1744,38 +1811,6 @@
                 InsertProducts();
             });
 
-
-
-
-
-            // DELETE BUTTON IN UNPAID ORDERS JQUERY
-            $('#tbl_unpaid').on('click','#btn_delete_order',function(){
-                $('.modal-title').html('MANAGER LOGIN');
-                $('#modal_manager_login').modal('toggle');
-                //alert('sdfdsfsdf');
-            });
-
-            $('#modal_manager_login').on('click','#btn_manager_close',function(){
-                $('.modal-title').html('UNPAID ORDERS');
-            });
-
-            $('#modal_manager_login').on('click','#btn_manager_login',function(){
-                validateUser().done(function(response){
-                    if(response.stat=="success"){
-                        showNotification(response);
-                        $('.modal-title').html('UNPAID ORDERS');
-                        $('#modal_manager_login').modal('hide');
-                        clearFields();
-                    } else {
-                        showNotification(response);
-
-                    }
-                });
-            });
-            ///////////////////////////////////////////////////////////
-
-
-
             var AppendProductToTable = function(product_id, prod_desc, pos_price, pos_discount, prod_tax, tax_amount, total, vendor_id) {
                 var td_productCode = product_id;
                 var index = $.inArray(td_productCode, addedProductCodes);
@@ -1898,26 +1933,23 @@
             };
 
             var validateUserVoid=function(){
+                var _data={uname : $('input[name="user_name_manager"]').val() , pword : $('input[name="user_pword_manager"]').val()};
+
+                return $.ajax({
+                    "dataType":"json",
+                    "type":"POST",
+                    "url":"Login/transaction/validatevoid",
+                    "data" : _data
+                });
+            };
+
+            var validateUser=function(){
                 var _data={uname : $('input[name="user_name"]').val() , pword : $('input[name="user_pword"]').val()};
 
                 return $.ajax({
                     "dataType":"json",
                     "type":"POST",
-                    "url":"Login/transaction/validatevoid",
-                    "data" : _data,
-                    "beforeSend": function(){
-
-                    }
-                });
-            };
-
-            var validateUser=function(){
-                var _data={uname : $('input[name="user_manager_name"]').val() , pword : $('input[name="user_manager_pword"]').val()};
-
-                return $.ajax({
-                    "dataType":"json",
-                    "type":"POST",
-                    "url":"Login/transaction/validatevoid",
+                    "url":"Login/transaction/validate",
                     "data" : _data
                 });
             };
