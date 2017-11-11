@@ -302,8 +302,6 @@
                             </div>
                         </div>
                     </div>
-                            
-                     
             <footer role="contentinfo">
                 <div class="clearfix">
                     <ul class="list-unstyled list-inline pull-left">
@@ -316,7 +314,6 @@
 </div>
 
 
-<?php echo $_switcher_settings; ?>
 <?php echo $_def_js_files; ?>
 
 <!-- Date range use moment.js same as full calendar plugin -->
