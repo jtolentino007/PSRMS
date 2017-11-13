@@ -146,6 +146,12 @@
                                             </a>
                                         </div>
                                         <div class="col-xs-12 col-sm-6">
+                                            <a href="Delivery_ingredients" class="btn btn-primary btn-block btn-height <?php echo (in_array('1-1', $this->session->user_rights) ? '' : 'hidden') ?>"><br>
+                                                <i class="fa fa-linode" style="font-size: 50px;"></i><br><br>
+                                                <span>INGREDIENTS RECEIVING</span>
+                                            </a>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
                                             <a href="Issuance" class="btn btn-success btn-block btn-height <?php echo (in_array('1-2', $this->session->user_rights) ? '' : 'hidden') ?>"><br>
                                                 <i class="fa fa-cube" style="font-size: 50px;"></i><br><br>
                                                 <span>ISSUANCE</span>
