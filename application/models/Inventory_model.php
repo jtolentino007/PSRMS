@@ -198,7 +198,9 @@ class Inventory_model extends CORE_Model {
               GROUP BY product_id
               ) as ii
               ON products.product_id=ii.product_id WHERE products.is_deleted=0) product_inventory
-              LEFT JOIN vendors v ON v.vendor_id = product_inventory.vendor_id";
+              LEFT JOIN vendors v ON v.vendor_id = product_inventory.vendor_id
+              LEFT JOIN categories c ON c.category_id = product_inventory.category_id
+              LEFT JOIN brands b ON b.brand_id = product_inventory.brand_id";
               
         return $this->db->query($sql)->result();
     }
