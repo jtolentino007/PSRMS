@@ -166,7 +166,7 @@
                             <div id="right2">
                                 #&nbsp;:&nbsp;
                                 <?php 
-                                    $currentDateTime = $delivery_info->transaction_timestamp;
+                                    $currentDateTime = $delivery_info->payment_timestamp;
                                     $newDateTime = date('m/d/Y h:i A', strtotime($currentDateTime));
                                     echo $newDateTime;
                                 ?><br>

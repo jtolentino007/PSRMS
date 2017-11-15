@@ -442,7 +442,7 @@ class Templates extends CORE_Controller {
 
                 $info=$m_invoice->get_list(
                     $filter_value,
-                    'pos_payment.*,pos_invoice.*,pos_invoice_items.*,customers.customer_name,user_accounts.*,CONCAT(user_fname, " ", user_lname) AS cashier',
+                    'pos_payment.*,pos_invoice.*,pos_invoice_items.*,customers.customer_name,user_accounts.*,CONCAT(user_fname, " ", user_lname) AS cashier, pos_payment.transaction_timestamp as payment_timestamp',
                     array(
                         array('pos_invoice','pos_invoice.pos_invoice_id=pos_payment.pos_invoice_id','left'),
                         array('customers','customers.customer_id=pos_invoice.customer_id','left'),
