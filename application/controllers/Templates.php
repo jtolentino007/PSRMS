@@ -452,7 +452,7 @@ class Templates extends CORE_Controller {
                 );
 
                 $invoice_id=$info[0]->pos_invoice_id;
-                $data['info']=$invoice_id;
+                $data['info']=$filter_value;
                 $footer=$m_info->get_list();
                 $company=$m_company->get_list();
                 $tables = $m_order_tables->get_list(
