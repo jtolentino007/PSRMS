@@ -65,7 +65,7 @@ $user_id = $id;
 			FROM pos_payment
 			LEFT JOIN pos_invoice ON pos_payment.pos_invoice_id=pos_invoice.pos_invoice_id
 			INNER JOIN pos_invoice_items ON pos_invoice_items.pos_invoice_id = pos_invoice.pos_invoice_id
-			LEFT JOIN customers ON pos_invoice.customer_id=customers.customer_id WHERE user_id='.$user_id.' AND DATE_FORMAT(transaction_timestamp, "%Y-%m-%d") BETWEEN "'.$sDate.'" AND "'.$eDate.'" GROUP BY pos_invoice_id');
+			LEFT JOIN customers ON pos_invoice.customer_id=customers.customer_id WHERE user_id='.$user_id.' AND DATE_FORMAT(pos_payment.transaction_timestamp, "%Y-%m-%d") BETWEEN "'.$sDate.'" AND "'.$eDate.'" GROUP BY pos_invoice_id');
 	$gtotal = $query->row();
 	//$grandtotal = $gtotal->grand_total;
 
