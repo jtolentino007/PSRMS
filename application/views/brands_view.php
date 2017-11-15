@@ -305,7 +305,6 @@ $(document).ready(function(){
 
         $('#tbl_brands tbody').on('click','button[name="edit_info"]',function(){
             _txnMode="edit";
-            $('#modal_brand').modal('show');
             _selectRowObj=$(this).closest('tr');
             var data=dt.row(_selectRowObj).data();
             _selectedID=data.brand_id;
@@ -318,6 +317,7 @@ $(document).ready(function(){
                     }
                 });
             });
+            $('#modal_brand').modal('show');
             showList(true);
         });
 
