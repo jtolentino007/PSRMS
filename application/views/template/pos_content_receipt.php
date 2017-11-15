@@ -160,6 +160,7 @@
                                 Date&nbsp;<br>
                                 Cashier&nbsp;<br>
                                 Table(s)&nbsp;<br>
+                                Customer(s)&nbsp;<br>
                             </div>
                             <div id="right2">
                                 #&nbsp;:&nbsp;
@@ -170,6 +171,7 @@
                                 ?><br>
                                 #&nbsp;:&nbsp;<?php echo $delivery_info->cashier; ?><br>
                                 &nbsp;&nbsp;:&nbsp;<?php echo $tables; ?><br>
+                                &nbsp;&nbsp;&nbsp;:&nbsp;<?php echo $delivery_info->customer_count; ?><br>
                             </div>
                         </div>
                     </div><br><br><br><br><br><br>
