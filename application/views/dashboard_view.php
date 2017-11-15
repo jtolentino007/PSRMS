@@ -239,7 +239,13 @@
                                                 <span>SUPPLIERS</span>
                                             </a>
                                         </div>
-                                        <div class="col-xs-12 col-sm-8">
+                                        <div class="col-xs-12 col-sm-4">
+                                            <a href="brands" class="btn btn-success btn-block btn-height <?php echo (in_array('1-15', $this->session->user_rights) ? '' : 'hidden') ?>" style="background: #009688!important; border-color: #009688!important;"><br>
+                                                <i class="fa fa-tags" style="font-size: 50px;"></i><br><br>
+                                                <span>BRANDS</span>
+                                            </a>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4">
                                             <a id="btn_pos" href="pos_v2" class="btn btn-primary btn-block btn-height <?php echo (in_array('1-3', $this->session->user_rights) ? '' : 'hidden') ?>"><br>
                                                 <i class="fa fa-calculator" style="font-size: 50px;"></i><br><br>
                                                 <span>POINT OF SALES</span>
