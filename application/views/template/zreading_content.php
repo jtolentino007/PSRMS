@@ -58,8 +58,8 @@ $endtime = $this->input->get('etime',TRUE);
 $sdate = date('Y-m-d', strtotime($startdate));
 $edate = date('Y-m-d', strtotime($enddate));
 
-$stime = date('H:i:s', strtotime($starttime));
-$etime = date('H:i:s', strtotime($endtime));
+$stime = date('h:i A', strtotime($starttime));
+$etime = date('h:i A', strtotime($endtime));
 
 $startDateTime = $sdate.' '.$stime;
 $endDateTime = $edate.' '.$etime;
@@ -102,9 +102,10 @@ $time = date("H:i:s", strtotime($date));
             </thead>
  <tbody>
 <?php
-	$query = $this->db->query('SELECT 
+	$query = $this->db->query("SELECT 
 			receipt_no,
 			pos_invoice.*,
+			TIME_FORMAT(pos_invoice.transaction_timestamp,'%Y-%m-%d %h:%i %p') transaction_timestamp,
 			customers.customer_name,
 			pos_payment.pos_payment_id,
 			SUM(pos_invoice_items.total) total
@@ -112,8 +113,8 @@ $time = date("H:i:s", strtotime($date));
 			LEFT JOIN pos_invoice ON pos_payment.pos_invoice_id=pos_invoice.pos_invoice_id
 			INNER JOIN pos_invoice_items ON pos_invoice_items.pos_invoice_id = pos_invoice.pos_invoice_id
 			LEFT JOIN customers ON pos_invoice.customer_id=customers.customer_id 
-			WHERE DATE_FORMAT(pos_invoice.transaction_timestamp, "%Y-%m-%d") BETWEEN "'.$sdate.'" AND "'.$edate.'"
-			GROUP BY pos_invoice_id');
+			WHERE TIME_FORMAT(pos_invoice.transaction_timestamp, '%Y-%m-%d %h:%i %p') BETWEEN '".$startDateTime."' AND '".$endDateTime."'
+			GROUP BY pos_invoice_id");
 	
 	$gtotal = $query->row();
 	$grandtotal=0; //start value of grandtotal
@@ -199,19 +200,21 @@ $time = date("H:i:s", strtotime($date));
                 <td style="border-bottom: 1px solid black;text-align:right;"><strong>Amount</strong></td>
             </tr>
 			<?php
-				$getproducts = $this->db->query('SELECT
-								pos_invoice_items.product_id,
-								product_desc,
-								pos_invoice.pos_invoice_no, 
-								pos_invoice.transaction_date,
-								SUM(pos_invoice_items.pos_qty) as prodsum,
-								pos_invoice_items.pos_price
-								FROM
-								pos_payment
-								LEFT JOIN pos_invoice ON pos_invoice.pos_invoice_id = pos_payment.pos_invoice_id
-								INNER JOIN pos_invoice_items ON pos_invoice_items.pos_invoice_id = pos_payment.pos_invoice_id
-								LEFT JOIN products ON products.product_id = pos_invoice_items.product_id
-								WHERE DATE_FORMAT(pos_invoice.transaction_timestamp, "%Y-%m-%d") BETWEEN "'.$sdate.'" AND "'.$edate.'" GROUP BY pos_invoice_items.product_id');
+				$getproducts = $this->db->query("SELECT
+				pos_invoice_items.product_id,
+				product_desc,
+				pos_invoice.pos_invoice_no, 
+				pos_invoice.transaction_date,
+				SUM(pos_invoice_items.pos_qty) as prodsum,
+				pos_invoice_items.pos_price
+				FROM
+				pos_payment
+				LEFT JOIN pos_invoice ON pos_invoice.pos_invoice_id = pos_payment.pos_invoice_id
+				INNER JOIN pos_invoice_items ON pos_invoice_items.pos_invoice_id = pos_payment.pos_invoice_id
+				LEFT JOIN products ON products.product_id = pos_invoice_items.product_id
+				WHERE DATE_FORMAT(pos_invoice.transaction_timestamp, '%Y-%m-%d %h:%i %p') BETWEEN '".$startDateTime."' AND '".$endDateTime."'
+				GROUP BY pos_invoice_items.product_id");
+
 				foreach($getproducts->result() as $row){
 					$product_id = $row->product_id;
 					$product_name = $row->product_desc;

@@ -271,7 +271,7 @@
                          </label>
                          <input type="text" id="todatepdf" name="todatepdf" class="date-picker form-control" value="<?php echo date("m/d/Y"); ?>" placeholder="Due Date" data-error-msg="End Date is required!" required readonly>
                     </div>
-                    <div class="col-xs-12 col-sm-4 hidden">
+                    <div class="col-xs-12 col-sm-4">
                          <label>
                             <strong>* Start Time :</strong>
                          </label>
