@@ -116,6 +116,8 @@
                                                         <th></th>
                                                         <th>PLU</th>
                                                         <th>Description</th>
+                                                        <th>Category</th>
+                                                        <th>Brand</th>
                                                         <th>SRP</th>
                                                         <th>Vendor</th>
                                                         <th>On hand</th>
@@ -822,11 +824,13 @@ $(document).ready(function(){
                 },
                 { targets:[1],data: "product_code" },
                 { targets:[2],data: "product_desc" },
-                { targets:[3],data: "sale_cost" },
-                { targets:[4],data: "vendor_name" },
-                { targets:[5],data: "stock_onhand" },
+                { targets:[3],data: "category_name" },
+                { targets:[4],data: "brand_name" },
+                { targets:[5],data: "sale_cost" },
+                { targets:[6],data: "vendor_name" },
+                { targets:[7],data: "stock_onhand" },
                 {
-                    targets:[6],
+                    targets:[8],
                     render: function (data, type, full, meta){
                         var btn_edit='<button class="btn btn-primary btn-sm" name="edit_info"  style="margin-left:-15px;" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i> </button>';
                         var btn_trash='<button class="btn btn-danger btn-sm" name="remove_info" style="margin-right:0px;" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> </button>';
