@@ -320,6 +320,7 @@
 			$m_pos->total_tax_amount = $this->get_numeric_value($this->input->post('total_tax_amount',TRUE));
 			$m_pos->total_after_tax = $this->get_numeric_value($this->input->post('total_after_tax',TRUE));
 			$m_pos->batch_id = $this->session->batch_id;
+			$m_pos->customer_count = $this->get_numeric_value($this->input->post('customer_count',TRUE));
 			$m_pos->save();
 
 			$server_id = $this->input->post('server_id',true);
@@ -423,6 +424,7 @@
 			$m_pos->total_tax_amount = $this->get_numeric_value($this->input->post('total_tax_amount',TRUE));
 			$m_pos->total_after_tax = $this->get_numeric_value($this->input->post('total_after_tax',TRUE));
 			$m_pos->batch_id = $this->session->batch_id;
+			$m_pos->customer_count = $this->get_numeric_value($this->input->post('customer_count',TRUE));
 			$m_pos->modify($pos_invoice_id);
 
 			$product_id = $this->input->post('product_id',TRUE);
@@ -505,6 +507,7 @@
 			$m_pos->total_tax_amount = $this->get_numeric_value($this->input->post('total_tax_amount',TRUE));
 			$m_pos->total_after_tax = $this->get_numeric_value($this->input->post('total_after_tax',TRUE));
 			$m_pos->batch_id = $this->session->batch_id;
+			$m_pos->customer_count = $this->get_numeric_value($this->input->post('customer_count',TRUE));
 			$m_pos->modify($pos_invoice_id);
 
 			$m_pos_items->delete_via_fk($pos_invoice_id);

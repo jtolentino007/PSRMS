@@ -238,6 +238,16 @@
                                                 </div>
                                            </div>
                                        </div>
+                                       <div class="row">
+                                           <div class="container-fluid">
+                                               <div class="col-xs-12 col-sm-6">
+                                                   <p style="font-weight: 600; font-size: 17px;">No. of Customer(s) :</p>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6">
+                                                   <p id="td_customer_count" class="text-right" style="font-weight: 600; font-size: 17px;">0</p>
+                                                </div>
+                                           </div>
+                                       </div>
                                        <div class="row hidden">
                                            <div class="container-fluid">
                                                 <div class="col-xs-12 col-sm-6">
@@ -481,8 +491,25 @@
                           </div>
                         </div>
 
+                        <div id="modal_customer_count" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+                              <div class="modal-dialog">
+                                    <div class="modal-content">
+                                          <div class="modal-header">
+                                                <center><h4>CONFIRMATION</h4></center>   
+                                          </div>
+                                          <div class="modal-body">
+                                                <center><h5 class="txt_customer_count">Please Enter Number of Customers for this order:</h5></center>
+                                                <input type="number" name="customer_count" class="form-control text-center" style="font-size: 25px!important; border: 1px solid #ddd!important;" value="0">
+                                          </div>
+                                          <div class="modal-footer">
+                                                <button id="btn_submit_count" type="button" class="btn btn-primary btn-block">Enter</button>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+
                         <div id="modal_unpaid" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
-                          <div class="modal-dialog modal-lg">
+                          <div class="modal-dialog" style="width: 80%">
                             <!-- Modal content-->
                             <div class="modal-content">
                               <div class="modal-header text-center">
@@ -782,14 +809,78 @@
             var _btnTotalTax = 0;
             var _btnTotalBeforeTax = 0;
             var _loginMode = 0;
+            var _customerCount = 0;
 
             toggleControls(true);
 
-            $('#btn_enter_order').on('click', function(){
-                if ($('#tbl_sales tbody tr').length > 0 && serversList.length > 0) {
+            $('#modal_customer_count').on('click', '#btn_submit_count', function(){
+                if (_isAdditional !== 1 && _isEdit !== 1) {
+                    if ($('input[name="customer_count"]').val() == 0) {
+                        showNotification({title: "Error!", msg: "Customer count cannot be zero", stat: "error"});
+                    } else {
+                        var _data = $('#frm_items').serializeArray();
+
+                        $('#btn_submit_count').prop('disabled',true);
+
+                        _data.push({name: "total_discount", value: parseFloat(accounting.unformat($('#td_total_discount').text())) });
+                        _data.push({name: "before_tax", value: parseFloat(accounting.unformat($('#td_total_before_tax').text())) });
+                        _data.push({name: "total_tax_amount", value: parseFloat(accounting.unformat($('#td_total_tax').text())) });
+                        _data.push({name: "total_after_tax", value: parseFloat(accounting.unformat($('#td_total_after_tax').text())) });
+
+                        _data.push({name: "customer_id", value: currentCustomer });
+                        _data.push({name: "pos_invoice_id", value: _posInvoiceID });
+                        _data.push({name: "customer_count", value: $('input[name="customer_count"]').val() });
+
+                        $.each(serversList,function(index,server_id){
+                            _data.push({name: "server_id[]", value: server_id });
+                        });
+
+                        $.each(tablesList,function(index, table){
+                            _data.push({name: "table_id[]", value: table});
+                        });
+
+                        $.each(_voidData, function(i,v){
+                            if (v.name == "product_id_void[]")
+                                _data.push({name: "product_id_void[]", value: v.value});
+
+                            if (v.name == "pos_qty_void[]")
+                                _data.push({name: "pos_qty_void[]", value: v.value});
+
+                            if (v.name == "pos_price_void[]")
+                                _data.push({name: "pos_price_void[]", value: v.value});
+
+                            if (v.name == "pos_total_void[]")
+                                _data.push({name: "pos_total_void[]", value: v.value});
+                        });
+
+                        $.ajax({
+                            "dataType":"json",
+                            "type":"POST",
+                            "url":"Pos_v2/createInvoice",
+                            "data":_data,
+                            "beforeSend": showSpinningProgress($('#btn_submit_count'))
+                        }).done(function(response){
+                            showNotification(response);
+                            toggleControls(true);
+                            $('#tbl_sales tbody').html('');
+                            resetSummary();
+                            btnTableClickCounter = 0;
+                            $('#order_title').html('PLEASE SELECT CUSTOMER...');
+                            _isEdit = 0;
+                            _isAdditional = 0;
+                            $('#btn_customers').prop('disabled',false);
+                            $('#btn_tables').prop('disabled',false);
+                            addedProductCodes = [];
+                            window.onbeforeunload = null;
+                            window.location.replace('Templates/layout/pospr-kitchen-bar/'+response.pos_invoice_id+'/print?vendorid=2');
+                            _voidData = [];
+                            //pos_invoice_id/print_layout/vendor_id
+                        });
+                    }
+                } else {
                     var _data = $('#frm_items').serializeArray();
 
-                    $('#btn_enter_order').prop('disabled',true);
+                    $('#btn_submit_count').prop('disabled',true);
 
                     if (_isAdditional == 1) {
                         _data.push({name: "total_discount", value: parseFloat(accounting.unformat($('#td_total_discount').text())) + parseFloat(accounting.unformat(_btnTotalDiscount)) });
@@ -797,14 +888,15 @@
                         _data.push({name: "total_tax_amount", value: parseFloat(accounting.unformat($('#td_total_tax').text())) + parseFloat(accounting.unformat(_btnTotalTax)) });
                         _data.push({name: "total_after_tax", value: parseFloat(accounting.unformat($('#td_total_after_tax').text())) + parseFloat(accounting.unformat(_btnAmountDue)) });
                     } else {
-                        _data.push({name: "total_discount", value: $('#td_total_discount').text() });
-                        _data.push({name: "before_tax", value: $('#td_total_before_tax').text() });
-                        _data.push({name: "total_tax_amount", value: $('#td_total_tax').text() });
-                        _data.push({name: "total_after_tax", value: $('#td_total_after_tax').text() });
+                        _data.push({name: "total_discount", value: parseFloat(accounting.unformat($('#td_total_discount').text())) });
+                        _data.push({name: "before_tax", value: parseFloat(accounting.unformat($('#td_total_before_tax').text())) });
+                        _data.push({name: "total_tax_amount", value: parseFloat(accounting.unformat($('#td_total_tax').text())) });
+                        _data.push({name: "total_after_tax", value: parseFloat(accounting.unformat($('#td_total_after_tax').text())) });
                     }
 
                     _data.push({name: "customer_id", value: currentCustomer });
                     _data.push({name: "pos_invoice_id", value: _posInvoiceID });
+                    _data.push({name: "customer_count", value: parseInt(_customerCount) + parseInt($('input[name="customer_count"]').val()) });
 
                     $.each(serversList,function(index,server_id){
                         _data.push({name: "server_id[]", value: server_id });
@@ -834,7 +926,7 @@
                             "type":"POST",
                             "url":"Pos_v2/updateInvoice",
                             "data":_data,
-                            "beforeSend": showSpinningProgress($('#btn_enter_order'))
+                            "beforeSend": showSpinningProgress($('#btn_submit_count'))
                         }).done(function(response){
                             showNotification(response);
                             toggleControls(true);
@@ -852,6 +944,8 @@
                             serversListArray = [];
                             window.onbeforeunload = null;
                             _voidData = [];
+                            _customerCount = 0;
+                            $('#modal_customer_count').modal('hide');
                             //window.location.replace('Templates/layout/pospr-kitchen-bar/'+response.pos_invoice_id+'/print?vendorid=1&lastid='+response.response_rows[0].is_last);
                             //pos_invoice_id/print_layout/vendor_id
                         });
@@ -861,7 +955,7 @@
                             "type":"POST",
                             "url":"Pos_v2/addProductToInvoice",
                             "data":_data,
-                            "beforeSend": showSpinningProgress($('#btn_enter_order'))
+                            "beforeSend": showSpinningProgress($('#btn_submit_count'))
                         }).done(function(response){
                             showNotification(response);
                             toggleControls(true);
@@ -879,33 +973,23 @@
                             window.onbeforeunload = null;
                             window.location.replace('Templates/layout/pospr-kitchen-bar-add/'+response.pos_invoice_id+'/print?vendorid=2');
                             _voidData = [];
-                            //pos_invoice_id/print_layout/vendor_id
-                        });
-                    } else {
-                        $.ajax({
-                            "dataType":"json",
-                            "type":"POST",
-                            "url":"Pos_v2/createInvoice",
-                            "data":_data,
-                            "beforeSend": showSpinningProgress($('#btn_enter_order'))
-                        }).done(function(response){
-                            showNotification(response);
-                            toggleControls(true);
-                            $('#tbl_sales tbody').html('');
-                            resetSummary();
-                            btnTableClickCounter = 0;
-                            $('#order_title').html('PLEASE SELECT CUSTOMER...');
-                            _isEdit = 0;
-                            _isAdditional = 0;
-                            $('#btn_customers').prop('disabled',false);
-                            $('#btn_tables').prop('disabled',false);
-                            addedProductCodes = [];
-                            window.onbeforeunload = null;
-                            window.location.replace('Templates/layout/pospr-kitchen-bar/'+response.pos_invoice_id+'/print?vendorid=2');
-                            _voidData = [];
+                            _customerCount = 0;
+                            $('#modal_customer_count').modal('hide');
                             //pos_invoice_id/print_layout/vendor_id
                         });
                     }
+                }
+            });
+
+            $('#btn_enter_order').on('click', function(){
+                if ($('#tbl_sales tbody tr').length > 0 && serversList.length > 0) {
+                    if (_isAdditional == 1 || _isEdit == 1)
+                        $('.txt_customer_count').html('Please Enter additional Customers count for this order:');
+                    else 
+                        $('.txt_customer_count').html('Please Enter Number of Customers for this order:');
+
+                    $('#btn_submit_count').prop('disabled',false);
+                    $('#modal_customer_count').modal('show');
                 } else {
                     showNotification({title: "Error!", msg: "No order or server to submit", stat: "error"})
                 }
@@ -1032,10 +1116,10 @@
                                 '<td style="vertical-align:middle;">' + accounting.formatNumber(value.total_after_tax,2) + '</td>' +
                                 '<td style="vertical-align:middle;">'+
                                     '<center>' +
-                                        '<button id="btn_add_order" class="btn btn-info" style="border-radius:0;" data-inv-id="'+value.pos_invoice_id+'" data-before-tax="'+value.before_tax+'" data-total-discount="'+value.total_discount+'"  data-amount-due="'+value.total_after_tax+'" data-total-tax="'+value.total_tax_amount+'">'+
+                                        '<button id="btn_add_order" class="btn btn-info" style="border-radius:0;" data-inv-id="'+value.pos_invoice_id+'" data-before-tax="'+value.before_tax+'" data-customer-count="'+value.customer_count+'" data-total-discount="'+value.total_discount+'"  data-amount-due="'+value.total_after_tax+'" data-total-tax="'+value.total_tax_amount+'">'+
                                             '<b>ADD ORDER</b>'+
                                         '</button>&nbsp;'+
-                                        '<button id="btn_edit_order" class="btn btn-primary" style="border-radius:0;" data-inv-id="'+value.pos_invoice_id+'" data-before-tax="'+value.before_tax+'" data-amount-due="'+value.total_after_tax+'" data-total-tax="'+value.total_tax_amount+'">'+
+                                        '<button id="btn_edit_order" class="btn btn-primary" style="border-radius:0;" data-inv-id="'+value.pos_invoice_id+'" data-before-tax="'+value.before_tax+'" data-customer-count="'+value.customer_count+'" data-amount-due="'+value.total_after_tax+'" data-total-tax="'+value.total_tax_amount+'">'+
                                             '<b>EDIT ORDER</b>'+
                                         '</button>&nbsp;'+
                                         '<button id="btn_print_order" class="btn btn-success" style="border-radius:0; padding: 12px 25px 12px 25px;" data-inv-id="'+value.pos_invoice_id+'" data-amount-due="'+value.total_after_tax+'">'+
@@ -1098,6 +1182,10 @@
                             tablesListArray.push(value.table_name);
                         });
 
+                        _customerCount = _btn.data('customer-count');
+
+                        $('#td_customer_count').html(_customerCount);
+
                         $('#tbl_sales > tbody').html('');
 
                         if (tablesListArray.length == 2)
@@ -1140,6 +1228,8 @@
             });
 
             $('#tbl_unpaid').on('click', '#btn_edit_order', function(){
+                _customerCount = $(this).data('customer-count');
+                $('#td_customer_count').html(_customerCount);
                 $.ajax({
                     "dataType":"json",
                     "url":"Pos_v2/getList/pos-items?inv_id="+$(this).data('inv-id'),
@@ -2083,6 +2173,7 @@
                 $('#td_total_tax').html('0.00');
                 $('#td_total_before_tax').html('0.00');
                 $('#td_total_after_tax').html('0.00');
+                $('#td_customer_count').html('0');
             };
 
             var validateRequiredFields=function(f){
