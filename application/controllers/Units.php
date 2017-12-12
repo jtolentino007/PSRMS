@@ -5,7 +5,12 @@ class Units extends CORE_Controller {
     function __construct() {
         parent::__construct('');
         $this->validate_session();
-        $this->load->model('Units_model');
+        $this->load->model(
+            array(
+                'Units_model',
+                'Measurements_model'
+            )
+        );
     }
 
     public function index() {
@@ -21,10 +26,38 @@ class Units extends CORE_Controller {
 
     function transaction($txn = null) {
         switch ($txn) {
-            case 'list':
+            case 'list-primary':
                 $m_units = $this->Units_model;
-                $response['data'] = $m_units->get_unit_list();
+                $response['data'] = $m_units->get_unit_list(null, 1);
                 echo json_encode($response);
+                break;
+
+            case 'list-child-units':
+                $m_measurements = $this->Measurements_model;
+
+                $unit_id = $this->input->get('uid',TRUE);
+
+                $response['data'] = $m_measurements->getUnits($unit_id);
+
+                echo json_encode($response);
+                break;
+
+            case 'child':
+                $m_units = $this->Units_model;
+                $m_measurements = $this->Measurements_model;
+
+                $unit_id = $this->input->get('uid',TRUE);
+                $data['unit_id'] = $unit_id;
+                $data['child_units'] = $m_units->get_unit_list(null,2);
+                $data['measurements'] = $m_measurements->get_list(
+                    'measurements.unit_id = '.$unit_id,
+                    'units.unit_name, measurements.*',
+                    array(
+                        array('units','units.unit_id = measurements.sub_unit_id','left')
+                    )
+                );  
+
+                echo $this->load->view('template/unit_conversion',$data,TRUE);
                 break;
 
             case 'create':
@@ -32,13 +65,14 @@ class Units extends CORE_Controller {
 
                 $m_units->unit_name = $this->input->post('unit_name', TRUE);
                 $m_units->unit_desc = $this->input->post('unit_desc', TRUE);
+                $m_units->unit_type = $this->input->post('unit_type', TRUE);
                 $m_units->save();
 
                 $unit_id = $m_units->last_insert_id();
 
                 $response['title'] = 'Success!';
                 $response['stat'] = 'success';
-                $response['msg'] = 'unit information successfully created.';
+                $response['msg'] = 'Unit information successfully created.';
                 $response['row_added'] = $m_units->get_unit_list($unit_id);
                 echo json_encode($response);
 
@@ -53,11 +87,35 @@ class Units extends CORE_Controller {
                 if($m_units->modify($unit_id)){
                     $response['title']='Success!';
                     $response['stat']='success';
-                    $response['msg']='unit information successfully deleted.';
+                    $response['msg']='Unit information successfully deleted.';
 
                     echo json_encode($response);
                 }
 
+                break;
+
+            case 'create-conversion':   
+                $m_measurements = $this->Measurements_model;
+
+                $unit_id = $this->input->post('unit_id',TRUE);
+                $sub_unit_id = $this->input->post('sub_unit_id',TRUE);
+                $equivalent_qty = $this->input->post('equivalent_qty',TRUE);
+
+                $m_measurements->delete_via_fk($unit_id);
+
+                for($i = 0; $i < count($sub_unit_id); $i++) 
+                {
+                    $m_measurements->unit_id = $unit_id;
+                    $m_measurements->sub_unit_id = $sub_unit_id[$i];
+                    $m_measurements->equivalent_qty = $this->get_numeric_value($equivalent_qty[$i]);
+                    $m_measurements->save();
+                }
+
+                $response['title'] = "Success!";
+                $response['stat'] = "success";
+                $response['msg'] = "Unit conversions successfully saved.";
+
+                echo json_encode($response);
                 break;
 
             case 'update':
@@ -66,12 +124,12 @@ class Units extends CORE_Controller {
                 $unit_id=$this->input->post('unit_id',TRUE);
                 $m_units->unit_name=$this->input->post('unit_name',TRUE);
                 $m_units->unit_desc=$this->input->post('unit_desc',TRUE);
-
+                $m_units->unit_type = $this->input->post('unit_type', TRUE);
                 $m_units->modify($unit_id);
 
                 $response['title']='Success!';
                 $response['stat']='success';
-                $response['msg']='unit information successfully updated.';
+                $response['msg']='Unit information successfully updated.';
                 $response['row_updated']=$m_units->get_unit_list($unit_id);
                 echo json_encode($response);
 

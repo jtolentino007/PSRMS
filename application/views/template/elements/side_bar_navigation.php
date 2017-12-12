@@ -215,30 +215,31 @@
       <div class="modal-content">
         <div class="modal-header">
           <a type="button" href="Dashboard" class="close" >&times;</a>
-          <h4 class="modal-title bold">Inventory Reports</h4>
+          <h4 class="modal-title bold">Inventory Report</h4>
         </div>
 	        <div class="modal-body">
-						<div class="col-md-12">
-							<form id="frm_inventoryreports">
-							<div class="row">
-								<label class="col-sm-2" style="float:left;margin-top:5px;font-weight:bold;" for="inputEmail1">Filter Dates :</label>
+    			<div class="col-md-12">
+    				<form id="frm_inventoryreports">
+    				<div class="row">
+				    <label class="col-sm-2" style="float:left;margin-top:5px;font-weight:bold;" for="inputEmail1"></label>
 	                <label class="col-sm-1" style="float:left;margin-top:5px;" for="inputEmail1">From :</label>
 	                <div class="col-sm-3">
 	                    <input type="text" id="inventoryfromdate" name="inventoryfromdate" class="date-picker form-control" value="<?php echo date("m/d/Y"); ?>" placeholder="From">
+                        <input type="time" id="inventoryfromtime" name="inventoryfromtime" class="form-control" value="06:00:00" placeholder="From">
 	                </div>
-									<label class="col-sm-1" style="float:left;margin-top:5px;" for="inputEmail1">To :</label>
+					<label class="col-sm-1" style="float:left;margin-top:5px;" for="inputEmail1">To :</label>
 	                <div class="col-sm-3">
-	                    <input type="text" id="inventorytodate" name="inventorytodate" class="date-picker form-control" value="<?php echo date("m/d/Y"); ?>" placeholder="From">
+	                    <input type="text" id="inventorytodate" name="inventorytodate" class="date-picker form-control" value="<?php echo date("m/d/Y",time() + 86400); ?>" placeholder="From">
+                        <input type="time" id="inventorytotime" name="inventorytotime" class="form-control" value="02:00:00" placeholder="From">
 	                </div>
 	            </div>
-							</form>
-							<hr>
-						</div>
-
-						<inventory class="preview_inventoryreports"></inventory>
-					</div>
+    			</form>
+    			<hr>
+    		</div>
+			<inventory class="preview_inventoryreports"></inventory>
+		  </div>
         <div class="modal-footer">
-					<button type="button" class="btn btn-default" id="print_inventory_report">Print</button>
+		  <button type="button" class="btn btn-default" id="print_inventory_report">Print</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
@@ -318,7 +319,7 @@ $(document).ready(function(){
 				$.ajax({
 		        "dataType":"html",
 		        "type":"POST",
-						"data":_data,
+				"data":_data,
 		        "url":"Templates/layout/inventoryreports/",
 		        beforeSend : function(){
                     $('.preview_inventoryreports').html("<center><img src='assets/img/loader/preloaderimg.gif'><h3>Loading...</h3></center>");
@@ -380,20 +381,20 @@ $(document).ready(function(){
 
     });
 
-		$('#print_inventory_report').click(function(event){
-					/*printing_notif();*/
-					var currentURL = window.location.href;
-					var output = currentURL.match(/^(.*)\/[^/]*$/)[1];
-					output = output+"/assets/css/css_special_files.css";
-					$(".preview_inventoryreports").printThis({
-							debug: false,
-							importCSS: true,
-							importStyle: false,
-							printContainer: false,
-							loadCSS: output,
-							formValues:false
-					});
-
+	$('#print_inventory_report').click(function(event){
+					// /*printing_notif();*/
+					// var currentURL = window.location.href;
+					// var output = currentURL.match(/^(.*)\/[^/]*$/)[1];
+					// output = output+"/assets/css/css_special_files.css";
+					// $(".preview_inventoryreports").printThis({
+					// 		debug: false,
+					// 		importCSS: true,
+					// 		importStyle: false,
+					// 		printContainer: false,
+					// 		loadCSS: output,
+					// 		formValues:false
+					// });
+        window.open('Templates/layout/inventoryreports_print?inventoryfromdate='+$('#inventoryfromdate').val()+'&inventorytodate='+$('#inventorytodate').val());
 	});
 
 });

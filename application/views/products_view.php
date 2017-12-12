@@ -612,7 +612,7 @@
             </div><!---modal-->
 
             <div id="modal_details" class="modal fade" role="dialog">
-              <div class="modal-dialog modal-lg">
+              <div class="modal-dialog" style="width: 80%;">
 
                 <!-- Modal content-->
                 <div class="modal-content">
@@ -621,9 +621,6 @@
                     <h4 class="modal-title">Details</h4>
                   </div>
                   <div id="details_body" class="modal-body">
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                   </div>
                 </div>
 
@@ -748,7 +745,136 @@
                         </div>
                     </div><!---content-->
                 </div>
-            </div><!---modal-->         
+            </div><!---modal-->       
+
+            <div id="modal_ingredient" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Ingredient Information</h4>
+                  </div>
+                  <div class="modal-body">
+                    <div class="row">
+                        <div class="container-fluid">
+                            <form id="frm_ingredients">
+                                <label>
+                                    <strong>* Ingredient Name :</strong>
+                                </label>
+                                <input type="text" name="ingredient_name" class="form-control" placeholder="Ingredient Name" data-error-msg="Ingredient name is required" style="text-transform: uppercase;" required>
+                                <label>
+                                    <strong>* Ingredient Unit :</strong>
+                                </label>
+                                <select id="cbo_unit_ingredient" name="ingredient_unit" class="form-control" data-error-msg="Ingredient unit is required" required>
+                                    <option value="0">NO UNIT</option>
+                                    <option value="create">[ CREATE NEW UNIT ]</option>
+                                    <?php foreach($units_list as $unit) { ?>
+                                        <option value="<?php echo $unit->unit_id; ?>"><?php echo $unit->unit_name; ?></option>
+                                    <?php } ?>
+                                </select>
+                                <label>
+                                    <strong>* Ingredient Category :</strong>
+                                </label>
+                                <select id="cbo_category_ingredient" name="ingredient_category_id" class="form-control" data-error-msg="Ingredient category is required" required>
+                                    <option value="0">NO CATEGORY</option>
+                                    <option value="create">[ CREATE NEW CATEGORY ]</option>
+                                    <?php foreach($categories as $category) { ?>
+                                        <option value="<?php echo $category->ingredient_category_id; ?>"><?php echo $category->ingredient_category_name; ?></option>
+                                    <?php } ?>
+                                </select>
+                                <label>
+                                    <strong>* Ideal Quantity</strong>
+                                </label>
+                                <input type="number" name="ideal_qty" class="form-control" value="0.00">
+                                <label>
+                                    <strong>* Warning Quantity</strong>
+                                </label>
+                                <input type="number" name="warning_qty" class="form-control" value="0.00">
+                            </form>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button id="btn_save_category" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>  
+
+            <div id="modal_units" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                                <button type="button" class="close"   data-dismiss="modal" aria-hidden="true">X</button>
+                                <h4 id="category_title" class="modal-title"><span id="modal_mode">Unit Information</span></h4>
+                            </div>
+                        <div class="modal-body">
+                            <form id="frm_unit" role="form" class="form-horizontal row-border">
+                                <div class="form-group">
+                                    <label class="col-md-3 col-md-offset-1 control-label"><strong>* Unit Name :</strong></label>
+                                    <div class="col-md-7">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-tag"></i>
+                                            </span>
+                                            <input type="text" name="unit_name" class="form-control" placeholder="Unit Name" data-error-msg="Unit name is required!" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-3 col-md-offset-1 control-label"><strong>* Unit Description :</strong></label>
+                                    <div class="col-md-7">
+                                        <textarea name="unit_desc" class="form-control" data-error-msg="Unit Description is required!" placeholder="Description" required></textarea>
+                                    </div>
+                                </div><br/>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="btn_save_unit" class="btn btn-primary">Save</button>
+                            <button id="btn_cancel_unit" class="btn btn-default">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="modal_new_category" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close"   data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 id="category_title" class="modal-title"><span id="modal_mode">Ingredients Category Information</span></h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <form id="frm_category" role="form">
+                                    <div class="">
+                                        <div class="col-xs-12">
+                                            <div class="form-group">
+                                                <label class="col-xs-12 control-label "><strong>* Ingredients Category Name :</strong></label>
+                                                <div class="col-xs-12">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">
+                                                            <i class="fa fa-tags"></i>
+                                                        </span>
+                                                        <input type="text" name="ingredient_category_name" class="form-control" placeholder="Category Name" data-error-msg="Ingredient category name is required!" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="btn_save_ing_category" class="btn btn-primary" name="btn_save">Save</button>
+                            <button id="btn_cancel_category" class="btn btn-default">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <footer role="contentinfo">
                 <div class="clearfix">
@@ -808,8 +934,12 @@ $(document).ready(function(){
     var _selectedID; 
     var _selectRowObj;
     var _addedIngredientsID = [];
+    var cboUnit;
+    var cboCategory;
+    var txnMode;
 
     var initializeControls=function(){
+
         dt=$('#tbl_products').DataTable({
             "dom": '<"toolbar">frtip',
             "bLengthChange":false,
@@ -846,6 +976,11 @@ $(document).ready(function(){
                 });
             }
         });
+
+        cboUnit = $('#cbo_unit_ingredient').select2();
+        cboCategory = $('#cbo_category_ingredient').select2();
+        cboUnit.select2({ dropdownParent: "#modal_ingredient" });
+        cboCategory.select2({ dropdownParent: "#modal_ingredient" });
 
         _inventory_type=$("#product_inventory").select2({
             placeholder: "Inventory type",
@@ -936,6 +1071,83 @@ $(document).ready(function(){
             $("div.toolbar").html(_btnNew);
         }();
     }();
+
+    $('#modal_details').on('click','#btn_add_new_ingredient', function(){
+        txnMode = "new";
+        $('#btn_save_category').prop('disabled',false);
+        $('#modal_ingredient').modal('show');
+    });
+
+    cboUnit.on('select2:select', function(){
+        if ($(this).select2('val') == 'create') {
+            $('#modal_units').modal('show');
+            $('#modal_ingredient').modal('hide');
+            clearFields($('#frm_unit'));
+            $('#btn_save_unit').prop('disabled', false);
+        }
+    });
+
+    cboCategory.on('select2:select', function(){
+        if ($(this).select2('val') == 'create') {
+            $('#modal_new_category').modal('show');
+            $('#modal_ingredient').modal('hide');
+            clearFields($('#frm_category'));
+            $('#btn_save_ing_category').prop('disabled', false);
+        }
+    });
+
+    $('#modal_units').on('click', '#btn_cancel_unit', function(){
+        $('#modal_units').modal('hide');
+        cboUnit.select2('val', 0);
+        $('#modal_ingredient').modal('show');
+    });
+
+    $('#modal_new_category').on('click', '#btn_cancel_category', function(){
+        $('#modal_new_category').modal('hide');
+        cboCategory.select2('val', 0);
+        $('#modal_ingredient').modal('show');
+    });
+
+    $('#modal_units').on('click', '#btn_save_unit', function(){
+        if (validateRequiredFields($('#frm_unit'))) {
+            createUnit().done(function(response){
+                showNotification(response);
+                cboUnit.append('<option value='+response.row_added[0].unit_id+'>'+response.row_added[0].unit_name+'</option>');
+                cboUnit.select2('val', response.row_added[0].unit_id);
+                $('#modal_units').modal('hide');
+                $('#modal_ingredient').modal('show');
+            });
+        }
+    });
+
+    $('#modal_new_category').on('click', '#btn_save_ing_category', function(){
+        if (validateRequiredFields($('#frm_category'))) {
+            createIngredientCategory().done(function(response){
+                showNotification(response);
+                cboCategory.append('<option value='+response.row_added[0].ingredient_category_id+'>'+response.row_added[0].ingredient_category_name+'</option>');
+                cboCategory.select2('val', response.row_added[0].ingredient_category_id);
+                $('#modal_new_category').modal('hide');
+                $('#btn_save_ing_category').prop('disabled',false);
+                $('#modal_ingredient').modal('show');
+            });
+        }
+    });
+
+    $('#btn_save_category').click(function(){
+        if(validateRequiredFields($('#frm_ingredients'))) {
+            if (txnMode == "new") {
+                createIngredient().done(function(response){
+                    showNotification(response);
+                    $('.cbo-ingredient').append('<option data-ingredient-name="'+response.row_added[0].ingredient_name+'" data-ingredient-unit="'+response.row_added[0].unit_name+'" value="'+response.row_added[0].ingredient_id+'" data-unit-id="'+response.row_added[0].ingredient_unit+'">'+response.row_added[0].ingredient_name+'</option>');
+                    clearFields($('#frm_ingredients'));
+                }).always(function(){
+                    showSpinningProgress($('#btn_save_category'));
+                });
+            }
+
+            $('#modal_ingredient').modal('hide');
+        }
+    });
 
     $('#btn_create_inventory_type').click(function(){
 
@@ -1034,7 +1246,7 @@ $(document).ready(function(){
 
         if(validateRequiredFields($('#frm_unit_group'))){
             var data=$('#frm_unit_group').serializeArray();
-
+            _data.push({ name: "unit_type", value: 1 });
             $.ajax({
                 "dataType":"json",
                 "type":"POST",
@@ -1118,7 +1330,18 @@ $(document).ready(function(){
                     }
                 }).done(function(response){
                     $('#details_body').html(response);
-                    reinitializeSelect2($('#cbo_ingredients_'+d.product_id));
+
+                    $.each($('.tbl-ingredients tbody tr'), function(){
+                        _addedIngredientsID.push($('input[name="ingredient_id[]"]', this).val());
+                    });
+
+                    $('#cbo_ingredients_'+d.product_id).select2({
+                        placeholder: "Please select Ingredient",
+                        allowClear: true
+                    });
+                    $('#cbo_ingredients_'+d.product_id).select2('val',null);
+
+                    //reinitializeSelect2();
                     // row.child( response ).show();
                     // // Add to the 'open' array
                     // if ( idx === -1 ) {
@@ -1148,6 +1371,7 @@ $(document).ready(function(){
 
         $(document).on('click','.tbl-ingredients tbody .btn_remove_ingredient', function(){
             $(this).closest('tr').remove();
+            _addedIngredientsID.splice($.inArray($(this).closest('tr').find('input[name="ingredient_id[]"]').val(), _addedIngredientsID),1);
         });
 
         $(document).on("select2:select",".cbo-ingredient", function(event) {
@@ -1162,15 +1386,42 @@ $(document).ready(function(){
                 if (index >= 0) {
                     event.preventDefault();
                 } else {
+
+                    var _unit_id = 0;
+                    var _ingredient_id = 0;
+
                     $('#tbl_ingredients_'+$(this).data('id')).append(
                         '<tr>' +
                             '<td class="hidden"><input type="hidden" name="ingredient_id[]" class="form-control" value="'+$('.cbo-ingredient option:selected').val()+'">'+$('.cbo-ingredient option:selected').val()+'</td>' +
                             '<td><input type="hidden" class="form-control" value="'+$('.cbo-ingredient option:selected').data('ingredient-name')+'">'+$('.cbo-ingredient option:selected').data('ingredient-name')+'</td>' +
-                            '<td><center><input style="width:100%;" type="number" class="form-control text-center" name="ingredient_amount[]" data-error-msg="Ingredient amount cannot be zero." value="0" required></center></td>' +
-                            '<td><input type="hidden" class="form-control" value="'+$('.cbo-ingredient option:selected').data('ingredient-unit')+'">'+$('.cbo-ingredient option:selected').data('ingredient-unit')+'</td>' +
+                            '<td><center><input style="width:100%;" type="number" class="form-control text-right" name="ingredient_amount[]" data-error-msg="Ingredient amount cannot be zero." value="0" required></center></td>' +
+                            '<td>'+
+                                '<select id="cbo_child_'+$('.cbo-ingredient option:selected').data('unit-id')+'_'+$('.cbo-ingredient option:selected').val()+'" class="form-control text-right" name="ingredient_unit_id[]">' + 
+                                '</select>' +
+                            '</td>' +
+                            '<td>' +
+                                '<input type="text" name="base_price[]" class="form-control text-right" data-error-msg="Ingredient base price cannot be zero." value="0" required/>' +
+                            '</td>' +
+                            '<td>' +
+                                '<input type="text" name="cost[]" class="form-control text-right" data-error-msg="Ingredient cost cannot be zero." value="0" required/>' +
+                            '</td>' +
                             '<td><center><button type="button" class="btn btn-danger btn-delete btn_remove_ingredient"><i class="fa fa-times"></i></button></center></td>' +
                         '</tr>'
                     );
+
+                    _ingredient_id = $('.cbo-ingredient option:selected').val();
+                    _unit_id = $('.cbo-ingredient option:selected').data('unit-id');
+
+                    $.ajax({
+                        "dataType":"json",
+                        "url":"Units/transaction/list-child-units?uid=" + _unit_id
+                    }).done(function(response){
+                        $.each(response.data, function(index, value){
+                            $('#cbo_child_'+ _unit_id + '_' + _ingredient_id).append(
+                                '<option value="'+ value.unit_id +'"">' + value.unit_name + '</option>'
+                            );
+                        });
+                    });
 
                     _addedIngredientsID.push($('.cbo-ingredient option:selected').val());
                 }
@@ -1302,6 +1553,42 @@ $(document).ready(function(){
             }
         });
     })();
+
+    var createIngredient=function() {
+        var _data = $('#frm_ingredients').serializeArray();
+        
+        return $.ajax({
+            "dataType":"json",
+            "type":"POST",
+            "url":"Ingredients/saveIngredients",
+            "data":_data,
+            "beforeSend": showSpinningProgress($('#btn_save_category'))
+        });
+    };
+
+    var createUnit=function() {
+        var _data = $('#frm_unit').serializeArray();
+        _data.push({ name: "unit_type", value: 1 });
+        return $.ajax({
+            "dataType":"json",
+            "type":"POST",
+            "url":"Units/transaction/create",
+            "data":_data,
+            "beforeSend": showSpinningProgress($('#btn_save_unit'))
+        });
+    };
+
+    var createIngredientCategory=function() {
+        var _data = $('#frm_category').serializeArray();
+        
+        return $.ajax({
+            "dataType":"json",
+            "type":"POST",
+            "url":"Ingredients_categories/transaction/create",
+            "data":_data,
+            "beforeSend": showSpinningProgress($('#btn_save_ing_category'))
+        });
+    };
 
     var reinitializeSelect2=function(combobox) {
         combobox.select2({

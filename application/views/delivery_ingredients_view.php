@@ -147,6 +147,153 @@
                                 </div>
                             </div>
 
+                            <div id="modal_create_suppliers" class="modal fade" tabindex="-1" role="dialog"><!--modal-->
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                            <h4 class="modal-title"><span id="modal_mode"> </span>Supplier Information</h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <form id="frm_supplier">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="col-md-12">
+                                            <div class="col-md-4" id="label">
+                                                 <label class="control-label boldlabel" style="text-align:right;"><font color="red"><b>*</b></font> Supplier Name :</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-users"></i>
+                                                    </span>
+                                                    <input type="text" name="supplier_name" class="form-control" placeholder="Supplier Name" data-error-msg="Supplier Name is required!" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="col-md-12">
+                                            <div class="col-md-4" id="label">
+                                                 <label class="control-label boldlabel" style="text-align:right;"><font color="red"><b>*</b></font> Address :</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-home"></i>
+                                                     </span>
+                                                     <textarea name="address" class="form-control" data-error-msg="Supplier address is required!" placeholder="Address" required ></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="col-md-12">
+                                            <div class="col-md-4" id="label">
+                                                 <label class="control-label boldlabel" style="text-align:right;">Email Address :</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-envelope-o"></i>
+                                                    </span>
+                                                    <input type="text" name="email_address" class="form-control" placeholder="Email Address">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="col-md-4" id="label">
+                                                 <label class="control-label boldlabel" style="text-align:right;">Landline :</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-mobile"></i>
+                                                    </span>
+                                                    <input type="text" name="landline" id="landline" class="form-control" placeholder="Landline">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="col-md-4" id="label">
+                                                 <label class="control-label boldlabel" style="text-align:right;">Mobile No :</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-mobile"></i>
+                                                    </span>
+                                                    <input type="text" name="mobile_no" id="mobile_no" class="form-control" placeholder="Mobile No">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div class="col-md-12">
+                                            <div class="col-md-4" id="label">
+                                                 <label class="control-label boldlabel" style="text-align:right;">TIN # :</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-code"></i>
+                                                    </span>
+                                                    <input type="text" name="tin_no" class="form-control" placeholder="TIN #">
+                                                </div>
+                                            </div>
+                                        </div> -->
+
+                                        <div class="col-md-12">
+                                            <div class="col-md-4" id="label">
+                                                 <label class="control-label boldlabel" style="text-align:right;"><font color="red"><b>*</b></font> Tax Type :</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-code"></i>
+                                                    </span>
+                                                    <select name="tax_type_id" id="tax_group" data-error-msg="Tax type is required!" required="">
+                                                        <option value="0">[ Create Tax Type ]</option>
+                                                        <?php foreach($tax_type as $group){ ?>
+                                                            <option value="<?php echo $group->tax_type_id; ?>"><?php echo $group->tax_type; ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="col-md-12">
+                                            <div class="col-md-12">
+                                                <label class="control-label boldlabel" style="text-align:left;padding-top:10px;"><i class="fa fa-user" aria-hidden="true" style="padding-right:10px;"></i>Supplier's Photo</label>
+                                                <hr style="margin-top:0px !important;height:1px;background-color:black;">
+                                            </div>
+                                            <div style="width:100%;height:300px;border:2px solid #34495e;border-radius:5px;">
+                                                <center>
+                                                    <img name="img_user" id="img_user" src="assets/img/anonymous-icon.png" height="140px;" width="140px;"></img>
+                                                </center>
+                                                <hr style="margin-top:0px !important;height:1px;background-color:black;">
+                                                <center>
+                                                     <button type="button" id="btn_browse" style="width:150px;margin-bottom:5px;" class="btn btn-primary">Browse Photo</button>
+                                                     <button type="button" id="btn_remove_photo" style="width:150px;" class="btn btn-danger">Remove</button>
+                                                     <input type="file" name="file_upload[]" class="hidden">
+                                                </center> 
+                                            </div>
+                                        </div>   
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button id="btn_save" type="button" class="btn" style="background-color:#2ecc71;color:white;">Save</button>
+                            <button id="btn_cancel" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div><!---content---->
+                </div>
+            </div><!---modal-->
+
                             <div id="modal_delivery" class="modal fade" role="dialog">
                                 <div class="modal-dialog" style="width: 80%">
                                     <div class="modal-content">
@@ -173,6 +320,7 @@
                                                                 <strong>* Supplier :</strong>
                                                             </label><br>
                                                             <select id="cbo_supplier" class="form-control" name="supplier_id" style="width: 100%;" data-error-msg="Supplier is required" required>
+                                                                <option value="create">[CREATE SUPPLIER]</option>
                                                                 <?php foreach($suppliers as $supplier) { ?>
                                                                     <option value="<?php echo $supplier->supplier_id; ?>"><?php echo $supplier->supplier_name; ?></option>
                                                                 <?php } ?>
@@ -200,7 +348,7 @@
                                                     </label><br>
                                                     <select class="form-control" id="cbo_ingredients" style="width: 100%;">
                                                         <?php foreach($ingredients as $ingredient) { ?>
-                                                            <option value="<?php echo $ingredient->ingredient_id; ?>" data-ingredient-name="<?php echo $ingredient->ingredient_name; ?>" data-ingredient-unit="<?php echo $ingredient->unit_name; ?>" data-ingredient-cost="<?php echo number_format($ingredient->ingredient_cost,2);?>"><?php echo $ingredient->ingredient_name.' ('.$ingredient->unit_name.')'; ?></option>
+                                                            <option value="<?php echo $ingredient->ingredient_id; ?>" data-ingredient-name="<?php echo $ingredient->ingredient_name; ?>" data-ingredient-unit="<?php echo $ingredient->unit_name; ?>"><?php echo $ingredient->ingredient_name.' ('.$ingredient->unit_name.')'; ?></option>
                                                         <?php } ?>
                                                     </select>
                                                 </div>
@@ -426,7 +574,7 @@
                                 '<td class="hidden"><input type="text" class="form-control" value="'+data.ingredient_id+'" name="ingredient_id[]"></td>' +
                                 '<td>'+data.ingredient_name+'</td>' +
                                 '<td>'+data.unit_name+'</td>' +
-                                '<td class="text-right"><input type="hidden" class="form-control text-right numeric" value="'+data.ingredient_cost+'" name="delivery_ingredients_items_price[]" readonly>'+data.ingredient_cost+'</td>' +
+                                '<td class="text-right"><input type="text" class="form-control text-right numeric" value="'+data.delivery_ingredients_items_price+'" name="delivery_ingredients_items_price[]"></td>' +
                                 '<td><input type="text" class="form-control text-right numeric" value="'+data.delivery_ingredients_items_discount+'" name="delivery_ingredients_items_discount[]"></td>' +
                                 '<td><input type="text" class="form-control text-right numeric" value="'+data.delivery_ingredients_items_tax_rate+'" name="delivery_ingredients_items_tax_rate[]"></td>' +
                                 '<td><input type="text" class="form-control text-right numeric" value="'+data.delivery_ingredients_items_line_total_discount+'" name="delivery_ingredients_items_line_total_discount[]" readonly /></td>' +
@@ -467,6 +615,9 @@
             });
 
             _cboIngredients.on('select2:select', function(){
+                if ($(this).val() == "create") {
+
+                }
                 InsertRow();
                 reComputeRowTotal();
                 recomputeTotal();
@@ -573,7 +724,7 @@
                         '<td class="hidden"><input type="text" class="form-control" value="'+_cboIngredients.val()+'" name="ingredient_id[]"></td>' +
                         '<td>'+$("#cbo_ingredients option:selected").data("ingredient-name")+'</td>' +
                         '<td>'+$("#cbo_ingredients option:selected").data("ingredient-unit")+'</td>' +
-                        '<td class="text-right"><input type="hidden" class="form-control text-right numeric" value="'+$("#cbo_ingredients option:selected").data("ingredient-cost")+'" name="delivery_ingredients_items_price[]" readonly>'+$("#cbo_ingredients option:selected").data("ingredient-cost")+'</td>' +
+                        '<td class="text-right"><input type="text" class="form-control text-right numeric" value="0.00" name="delivery_ingredients_items_price[]"></td>' +
                         '<td><input type="text" class="form-control text-right numeric" value="0" name="delivery_ingredients_items_discount[]"></td>' +
                         '<td><input type="text" class="form-control text-right numeric" value="0" name="delivery_ingredients_items_tax_rate[]"></td>' +
                         '<td><input type="text" class="form-control text-right numeric" value="0" name="delivery_ingredients_items_line_total_discount[]" readonly /></td>' +
@@ -639,7 +790,7 @@
                 var rowDiscount = parseFloat(accounting.unformat($(this).find('td').find('input[name="delivery_ingredients_items_discount[]"]').val()));
                 var rowTax = parseFloat(accounting.unformat($(this).find('td').find('input[name="delivery_ingredients_items_tax_rate[]"]').val()));
 
-                if(rowDiscount>=rowSrp){
+                if(rowDiscount>rowSrp){
                     showNotification({title:"Invalid",stat:"error",msg:"Discount must not greater than unit price."});
                     $(this).find('td').find('input[name="delivery_ingredients_items_discount[]"]').val('0.00');
                 } else {

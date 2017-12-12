@@ -281,7 +281,7 @@
 			$m_payment->pos_invoice_id = $this->get_numeric_value($this->input->post('pos_invoice_id',TRUE));
 			$m_payment->approved_by = $this->get_numeric_value($this->input->post('approved_by',TRUE));
 			$m_payment->set('transaction_date','NOW()');
-			//$m_payment->set('transaction_timestamp','NOW()');
+			$m_payment->transaction_timestamp = date('Y-m-d H:i:s');
 			$m_payment->save();
 
 			$pos_payment_id = $m_payment->last_insert_id();
@@ -312,6 +312,7 @@
 
 			$m_pos->begin();
 
+			$m_pos->transaction_timestamp = date('Y-m-d H:i:s');
 			$m_pos->set('transaction_date','NOW()');
 			$m_pos->customer_id = $this->input->post('customer_id',TRUE);
 			$m_pos->user_id = $this->session->userdata('user_id');
@@ -416,7 +417,6 @@
 			$query = $this->db->update('pos_invoice_items', array('status ' => FALSE));
 
 			$pos_invoice_id = $this->input->post('pos_invoice_id',TRUE);
-			$m_pos->set('transaction_date','NOW()');
 			$m_pos->customer_id = $this->input->post('customer_id',TRUE);
 			$m_pos->user_id = $this->session->userdata('user_id');
 			$m_pos->total_discount = $this->get_numeric_value($this->input->post('total_discount',TRUE));
@@ -499,7 +499,6 @@
 
 			$m_pos->begin();
 			$pos_invoice_id = $this->input->post('pos_invoice_id',TRUE);
-			$m_pos->set('transaction_date','NOW()');
 			$m_pos->customer_id = $this->input->post('customer_id',TRUE);
 			$m_pos->user_id = $this->session->userdata('user_id');
 			$m_pos->total_discount = $this->get_numeric_value($this->input->post('total_discount',TRUE));

@@ -14,6 +14,7 @@ class Products extends CORE_Controller
 		$this->load->model('Brands_model');
 		$this->load->model('Vendors_model');
         $this->load->model('Recipes_model');
+        $this->load->model('Ingredients_categories_model');
     }
 
     public function index() {
@@ -23,6 +24,8 @@ class Products extends CORE_Controller
         $data['product_dept'] = $this->Products_model->getDepartment();
         $data['product_unit'] = $this->Units_model->get_list(array('units.is_active'=>TRUE,'units.is_deleted'=>FALSE));
         $data['product_vendor'] = $this->Vendors_model->get_list(null,'vendor_id,vendor_name');
+        $data['categories'] = $this->Ingredients_categories_model->get_list('is_deleted=FALSE');
+        $data['units_list'] = $this->Units_model->get_list(array('units.is_active'=>TRUE,'units.is_deleted'=>FALSE));
         $data['_def_css_files'] = $this->load->view('template/assets/css_files', '', TRUE);
         $data['_def_js_files'] = $this->load->view('template/assets/js_files', '', TRUE);
         $data['_switcher_settings'] = $this->load->view('template/elements/switcher', '', TRUE);
@@ -47,6 +50,9 @@ class Products extends CORE_Controller
                 $product_id = $this->input->post('product_id',TRUE);
                 $ingredient_id = $this->input->post('ingredient_id',TRUE);
                 $qty_per_order = $this->input->post('ingredient_amount',TRUE);
+                $ingredient_unit_id = $this->input->post('ingredient_unit_id',TRUE);
+                $base_price = $this->input->post('base_price',TRUE);
+                $cost = $this->input->post('cost',TRUE);
 
                 $m_recipe->delete_via_fk($product_id);
 
@@ -54,7 +60,10 @@ class Products extends CORE_Controller
                 {
                     $m_recipe->product_id = $product_id;
                     $m_recipe->ingredient_id = $ingredient_id[$i];
-                    $m_recipe->qty_per_order = $qty_per_order[$i];
+                    $m_recipe->qty_per_order = $this->get_numeric_value($qty_per_order[$i]);
+                    $m_recipe->ingredient_unit_id = $ingredient_unit_id[$i];
+                    $m_recipe->base_price = $this->get_numeric_value($base_price[$i]);
+                    $m_recipe->cost = $this->get_numeric_value($cost[$i]);
                     $m_recipe->save();
                 }
 

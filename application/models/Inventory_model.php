@@ -20,6 +20,90 @@ class Inventory_model extends CORE_Model {
         return $this->db->query($sql)->result();
     }
 
+    function get_actual_inventory($startDate,$endDate)
+    {
+        $sql = "SELECT
+                product_stock_in.*,
+                IFNULL(product_stock_out.stock_out,0) total_out,
+                (total_in - IFNULL(product_stock_out.stock_out,0)) stock_onhand
+                FROM
+                (SELECT
+                product_id,
+                product_code,
+                product_desc,
+                ingredient_id,
+                ingredient_name,
+                stock_in primary_qty,
+                equivalent_qty,
+                (IFNULL(stock_in,0) * IFNULL(equivalent_qty,0)) converted_qty,
+                qty_per_order,
+                ((IFNULL(stock_in,0) * IFNULL(equivalent_qty,0)) / IFNULL(qty_per_order,0)) total_in
+                FROM
+                (SELECT
+                product_id,
+                product_code,
+                product_desc,
+                ingredient_id,
+                ingredient_name,
+                ingredient_unit,
+                ingredient_unit_id,
+                qty_per_order,
+                MIN(stock_in) stock_in
+                FROM
+                (SELECT
+                products.product_id,
+                products.product_code,
+                products.product_desc,
+                ingredients.ingredient_id,
+                ingredients.ingredient_name,
+                ingredients.ingredient_unit,
+                recipes.ingredient_unit_id,
+                recipes.qty_per_order,
+                IFNULL(stock_in,0) stock_in
+                FROM
+                recipes
+                LEFT JOIN ingredients ON ingredients.ingredient_id = recipes.ingredient_id
+                LEFT JOIN products ON products.product_id = recipes.product_id
+
+                LEFT JOIN 
+
+                (SELECT
+                    deliveries.ingredient_id,
+                    SUM(deliveries.delivery_ingredients_items_qty) stock_in
+                FROM
+                (SELECT 
+                    delivery_ingredients_info.*,
+                    delivery_ingredients_items.ingredient_id,
+                    delivery_ingredients_items.delivery_ingredients_items_qty
+                FROM
+                (delivery_ingredients_info
+                INNER JOIN delivery_ingredients_items ON delivery_ingredients_items.delivery_ingredients_info_id = delivery_ingredients_info.delivery_ingredients_info_id)
+                WHERE   
+                delivery_ingredients_info.is_deleted = FALSE 
+                AND delivery_ingredients_info.date_received_timestamp BETWEEN '".$startDate."' AND '".$endDate."') deliveries
+                GROUP BY ingredient_id) stock_in
+
+                ON stock_in.ingredient_id = recipes.ingredient_id) tbl_stock_in
+                GROUP BY product_id) in_inventory
+
+                LEFT JOIN measurements ON measurements.unit_id = in_inventory.ingredient_unit AND measurements.sub_unit_id = in_inventory.ingredient_unit_id) product_stock_in
+
+                LEFT JOIN 
+
+                (SELECT
+                product_id,
+                SUM(pos_qty) stock_out
+                FROM
+                pos_invoice
+                INNER JOIN pos_invoice_items ON pos_invoice_items.pos_invoice_id = pos_invoice.pos_invoice_id
+                WHERE pos_invoice.transaction_timestamp BETWEEN '".$startDate."' AND '".$endDate."'
+                GROUP BY product_id) product_stock_out
+
+                ON product_stock_out.product_id = product_stock_in.product_id";
+
+          return $this->db->query($sql)->result();
+    }
+
     function get_inventory_onhand_list_filter($inventoryfromdate,$inventorytodate){
         $sql="SELECT
               inventory.*,

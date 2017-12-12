@@ -4,11 +4,11 @@
 <table class="table table-responsive">
   <thead>
     <tr>
-      <th>Item Description</th>
       <th>Item Code</th>
-      <th>In</th>
-      <th>Out</th>
-      <th>Balance</th>
+      <th>Item Description</th>
+      <th align="right">In</th>
+      <th align="right">Out</th>
+      <th align="right">On hand</th>
     </tr>
   </thead>
   <tbody>
@@ -16,11 +16,11 @@
       foreach($inventory as $items){
       ?>
       <tr>
-        <td><?php echo $items->product_desc; ?></td>
         <td><?php echo $items->product_code; ?></td>
-        <td><?php echo $items->total_in; ?></td>
-        <td><?php echo $items->total_out; ?></td>
-        <td><?php echo $items->stock_onhand; ?></td>
+        <td><?php echo $items->product_desc; ?></td>
+        <td align="right"><?php echo number_format($items->total_in,0); ?></td>
+        <td align="right"><?php echo number_format($items->total_out,0); ?></td>
+        <td align="right"><?php echo number_format($items->stock_onhand,0); ?></td>
       </tr>
     <?php
       }

@@ -39,7 +39,6 @@
 		                                                        <th>Category</th>
 		                                                        <th>Ideal Qty</th>
 		                                                        <th>Warning Qty</th>
-		                                                        <th>Cost</th>
 		                                                        <th>Action</th>
 		                                                    </tr>
 	                                                    </thead>
@@ -107,7 +106,7 @@
 								        		<label>
 								        			<strong>* Ingredient Name :</strong>
 								        		</label>
-								        		<input type="text" name="ingredient_name" class="form-control" placeholder="Ingredient Name" data-error-msg="Ingredient name is required" required>
+								        		<input type="text" name="ingredient_name" class="form-control" placeholder="Ingredient Name" data-error-msg="Ingredient name is required" style="text-transform: uppercase;" required>
 								        		<label>
 								        			<strong>* Ingredient Unit :</strong>
 								        		</label>
@@ -136,10 +135,6 @@
 								        			<strong>* Warning Quantity</strong>
 								        		</label>
 								        		<input type="number" name="warning_qty" class="form-control" value="0.00">
-								        		<label>
-								        			<strong>* Cost</strong>
-								        		</label>
-								        		<input type="number" name="ingredient_cost" class="form-control" value="0.00">
 							        		</form>
 							        	</div>
 							        </div>
@@ -278,18 +273,10 @@
 		                	render: function(data, type, full, meta) {
 		                		return accounting.formatNumber(data, 2);
 		                	}
-		                },
-		                {
-		                	class: 'text-right',
-		                	targets:[5],
-		                	data: "ingredient_cost",
-		                	render: function(data, type, full, meta) {
-		                		return accounting.formatNumber(data, 2);
-		                	}
-		                },
+		              	},
 		                {
 		                	class: 'text-center',
-		                    targets:[6],
+		                    targets:[7],
 		                    render: function (data, type, full, meta){
 		                        var btn_edit='<button class="btn btn-primary btn-sm" name="edit_info"  style="margin-left:-15px;" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i> </button>';
 		                        var btn_trash='<button class="btn btn-danger btn-sm" name="remove_info" style="margin-right:0px;" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> </button>';
@@ -447,7 +434,7 @@
 
 			var createUnit=function() {
 				var _data = $('#frm_unit').serializeArray();
-				
+				_data.push({ name: "unit_type", value: 1 });
 				return $.ajax({
 					"dataType":"json",
 		            "type":"POST",

@@ -8,37 +8,40 @@
 			padding: 10px;
 		}
 
+		html {
+			font-family: 'Arial', sans-serif;
+			font-size: 12px;
+		}
+
 	</style>
 </head>
 <body>
-	<table width="100%" border="1" cellspacing="0">
+	<table width="100%" cellspacing="0">
 		<tr>
 			<td colspan="4">
-				<center><h1>Delivery Invoice</h1></center>
+				<center><h1 style="font-weight: 500;">DELIVERY INVOICE</h1></center>
 			</td>
 		</tr>
 		<tr>
-			<td width="15%"><strong>DOCUMENT CODE :</strong></td>
-			<td><?php echo $info->delivery_ingredients_info_no; ?></td>
+			<td width="20%"><strong>DOCUMENT CODE :</strong></td>
+			<td style="border-bottom: 1px solid black; font-weight: 700;"><?php echo $info->delivery_ingredients_info_no; ?></td>
 			<td width="15%"><strong>RECEIPT # :</strong></td>
-			<td><?php echo $info->delivery_ingredients_doc_no; ?></td>
+			<td style="border-bottom: 1px solid black; font-weight: 700;"><?php echo $info->delivery_ingredients_doc_no; ?></td>
 		</tr>
 		<tr>
-			<td width="15%"><strong>SUPPLIER :</strong></td>
-			<td><?php echo $info->supplier_name; ?></td>
-			<td width="15%"><strong>DATE RECEIVED :</strong></td>
-			<td><?php echo $info->date_received; ?></td>
+			<td width="20%"><strong>SUPPLIER :</strong></td>
+			<td style="border-bottom: 1px solid black;font-weight: 700;"><?php echo $info->supplier_name; ?></td>
+			<td width="20%"><strong>DATE RECEIVED :</strong></td>
+			<td style="border-bottom: 1px solid black; font-weight: 700;"><?php echo $info->date_received; ?></td>
 		</tr>
 		<tr>
-			<td width="15%"><strong>REMARKS :</strong></td>
-			<td colspan="3"><?php echo $info->remarks; ?></td>
+			<td width="20%"><strong>REMARKS :</strong></td>
+			<td style="border-bottom: 1px solid black; font-weight: 700;" colspan="3"><?php echo $info->remarks; ?></td>
 		</tr>
-	</table>
+	</table><br>
 	<table width="100%" border="1" cellspacing="0">
 		<thead>
-			<th width="7%">Qty</th>
 			<th width="20%">Description</th>
-			<th width="10%">Unit</th>
 			<th width="10%">Cost</th>
 			<th width="10%">Discount</th>
 			<th width="10%">Tax</th>
@@ -47,9 +50,7 @@
 		<tbody>
 			<?php foreach($items as $item) { ?>
 				<tr>
-					<td align="center"><?php echo number_format($item->delivery_ingredients_items_qty,2); ?></td>
-					<td><?php echo $item->ingredient_name; ?></td>
-					<td><?php echo $item->unit_name; ?></td>
+					<td><?php echo $item->ingredient_name; ?><br><small><?php echo number_format($item->delivery_ingredients_items_qty,2); ?> <?php echo $item->unit_name; ?></small></td>
 					<td align="right"><?php echo number_format($item->delivery_ingredients_items_price,2); ?></td>
 					<td align="right"><?php echo number_format($item->delivery_ingredients_items_line_total_discount,2); ?></td>
 					<td align="right"><?php echo number_format($item->delivery_ingredients_items_tax_amount,2); ?></td>
@@ -61,13 +62,13 @@
 			<tr>
 				<td colspan="2"><strong>Total Discount:</strong></td>
 				<td align="right"><?php echo number_format($info->total_discount,2); ?></td>
-				<td colspan="2"><strong>Total Before Tax:</strong></td>
+				<td><strong>Total Before Tax:</strong></td>
 				<td colspan="2" align="right"><?php echo number_format($info->total_before_tax,2); ?></td>
 			</tr>
 			<tr>
 				<td colspan="2"><strong>Total Tax Amount:</strong></td>
 				<td align="right"><?php echo number_format($info->total_tax_amount,2); ?></td>
-				<td colspan="2"><strong>Total After Tax:</strong></td>
+				<td><strong>Total After Tax:</strong></td>
 				<td colspan="2" align="right"><?php echo number_format($info->total_after_tax,2); ?></td>
 			</tr>
 		</tfoot>

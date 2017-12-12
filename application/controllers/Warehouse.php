@@ -8,6 +8,7 @@
 		{
 			parent::__construct('');
 			$this->validate_session();
+			$this->load->model('Products_model');
 		}
 
 		public function index()
@@ -20,6 +21,23 @@
 	        $data['title'] = 'Warehouse Management';
 
 	        $this->load->view('warehouse_view',$data);
+		}
+
+		public function getList($txn = null)
+		{
+			switch ($txn) {
+				case 'getIngredientInventory':
+					$m_products = $this->Products_model;
+
+					$response['data'] = $m_products->ingredientInventory();
+
+					echo json_encode($response);
+					break;
+				
+				default:
+					# code...
+					break;
+			}
 		}
 	}
 ?>

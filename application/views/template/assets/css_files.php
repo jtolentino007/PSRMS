@@ -27,6 +27,10 @@
 		background:none!important;
 	}
 
+	span.select2-container {
+        z-index:10050;
+    }
+
 	/*.panel {
 		-webkit-box-shadow: 0px 0px 8px 0px rgba(115,110,115,1);
 		-moz-box-shadow: 0px 0px 8px 0px rgba(115,110,115,1);

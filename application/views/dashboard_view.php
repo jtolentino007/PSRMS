@@ -78,7 +78,7 @@
         <div id="layout-static">
         <?php echo $_side_bar_navigation; ?>
         <div class="static-content-wrapper">
-            <div class="static-content"  >
+            <div class="static-content">
                 <div class="page-content">
                     <div class="row">
                         <div class="container-fluid">
@@ -107,7 +107,7 @@
                                             </a>
                                         </div>
                                         <div class="col-xs-12 col-sm-6">
-                                            <a href="ingredients_categories" class="btn btn-success btn-block btn-height <?php echo (in_array('1-7', $this->session->user_rights) ? '' : 'hidden') ?>" style="background: #009688!important; border-color: #009688!important;"><br>
+                                            <a href="ingredients_categories" class="btn btn-success btn-block btn-height <?php echo (in_array('1-7', $this->session->user_rights) ? '' : 'hidden') ?>" style="background:#4caf50!important; border-color:#4caf50!important;"><br>
                                                 <i class="fa fa-clone" style="font-size: 50px;"></i><br><br>
                                                 <span>INGREDIENTS CATEGORIES</span>
                                             </a>
@@ -115,7 +115,7 @@
                                         <div class="col-xs-12 col-sm-6">
                                             <a href="units" class="btn btn-success btn-block btn-height <?php echo (in_array('1-8', $this->session->user_rights) ? '' : 'hidden') ?>" style="background: #d39e00!important; border-color: #d39e00!important;"><br>
                                                 <i class="fa fa-cube" style="font-size: 50px;"></i><br><br>
-                                                <span>UNITS</span>
+                                                <span>UNIT OF MEASUREMENT</span>
                                             </a>
                                         </div>
                                         <div class="col-xs-12 col-sm-6">
@@ -139,28 +139,28 @@
                                         <h2 class="panel-title">STOCK SECTION</h2>
                                     </div>
                                     <div class="panel-body">
-                                        <div class="col-xs-12 col-sm-6">
+                                        <!-- <div class="col-xs-12 col-sm-6">
                                             <a href="Deliveries" class="btn btn-primary btn-block btn-height <?php echo (in_array('1-1', $this->session->user_rights) ? '' : 'hidden') ?>"><br>
                                                 <i class="fa fa-truck" style="font-size: 50px;"></i><br><br>
                                                 <span>RECEIVING</span>
                                             </a>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-6">
+                                        </div> -->
+                                        <div class="col-xs-12 col-sm-12">
                                             <a href="Delivery_ingredients" class="btn btn-primary btn-block btn-height <?php echo (in_array('1-1', $this->session->user_rights) ? '' : 'hidden') ?>"><br>
                                                 <i class="fa fa-linode" style="font-size: 50px;"></i><br><br>
-                                                <span>INGREDIENTS RECEIVING</span>
+                                                <span>STOCKS RECEIVING</span>
                                             </a>
                                         </div>
-                                        <div class="col-xs-12 col-sm-6">
+                                        <!-- <div class="col-xs-12 col-sm-6">
+                                            <a href="stock" class="btn btn-success btn-block btn-height <?php echo (in_array('1-17', $this->session->user_rights) ? '' : 'hidden') ?>" style="background: #2980b9!important; border-color: #2980b9!important;"><br>
+                                                <i class="fa fa-exchange" style="font-size: 50px;"></i><br><br>
+                                                <span>STOCKS IN / OUT</span>
+                                            </a>
+                                        </div> -->
+                                        <!-- <div class="col-xs-12 col-sm-6">
                                             <a href="Issuance" class="btn btn-success btn-block btn-height <?php echo (in_array('1-2', $this->session->user_rights) ? '' : 'hidden') ?>"><br>
                                                 <i class="fa fa-cube" style="font-size: 50px;"></i><br><br>
                                                 <span>ISSUANCE</span>
-                                            </a>
-                                        </div>
-                                        <!-- <div class="col-xs-12 col-sm-12">
-                                            <a href="stock" class="btn btn-success btn-block btn-height <?php echo (in_array('1-17', $this->session->user_rights) ? '' : 'hidden') ?>" style="background: #2980b9!important; border-color: #2980b9!important;"><br>
-                                                <i class="fa fa-linode" style="font-size: 50px;"></i><br><br>
-                                                <span>STOCKS</span>
                                             </a>
                                         </div> -->
                                     </div>
@@ -304,7 +304,7 @@
                                             </a>
                                         </div>
                                         <div class="col-xs-12 col-sm-4">
-                                            <a href="warehouse" class="btn btn-primary btn-block btn-height <?php echo (in_array('1-18', $this->session->user_rights) ? '' : 'hidden') ?>"><br>
+                                            <a href="warehouse" class="btn btn-danger btn-block btn-height <?php echo (in_array('1-18', $this->session->user_rights) ? '' : 'hidden') ?>"><br>
                                                 <i class="fa fa-bank" style="font-size: 50px;"></i><br><br>
                                                 <span>WAREHOUSE REPORT</span>
                                             </a>
@@ -321,6 +321,53 @@
                     <button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="ti ti-arrow-up"></i></button>
                 </div>
             </footer>
+
+
+            <!-- Modal -->
+            <div id="modal_conversion" class="modal fade" role="dialog">
+                  <div class="modal-dialog modal-lg">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                          <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Unit Conversions</h4>
+                          </div>
+                          <div class="modal-body">
+                                <label>
+                                    <strong>* Parent Unit :</strong>
+                                </label>
+                                <select id="cbo_units" class="form-control" name="unit_id">
+                                    <?php foreach($units as $unit) { ?>
+                                        <option value="<?php echo $unit->unit_id; ?>"><?php echo $unit->unit_name; ?></option>
+                                    <?php } ?>
+                                </select>
+                                <hr>
+                                <label>
+                                    <strong>* Sub-units :</strong>
+                                </label>
+                                <select id="cbo_units" class="form-control" name="unit_id">
+                                    <?php foreach($units as $unit) { ?>
+                                        <option value="<?php echo $unit->unit_id; ?>"><?php echo $unit->unit_name; ?></option>
+                                    <?php } ?>
+                                </select><br>
+                                <table class="table table-striped table-bordered">
+                                    <thead style="background: #2196f3; color: white;">
+                                        <th>Sub-unit</th>
+                                        <th><center>Qty</center></th>
+                                        <th><center>Action</center></th>
+                                    </thead>
+                                    <tbody id="tbl_conversions_content"></tbody>
+                                </table>
+                          </div>
+                          <div class="modal-footer">
+                                <button id="btn_save_conversion" type="button" class="btn btn-primary">Save</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                          </div>
+                    </div>
+
+                  </div>
+            </div>
+
         </div>
         </div>
 </div>
@@ -349,6 +396,15 @@
 </script>
 <script>
 $(document).ready(function(){
+    var conversionEventHandlers = function() {
+        $('#cbo_units').select2({
+            placeholder: "Select Unit"
+        }); 
+
+        $('#btn_conversion').on('click', function(){
+            $('#modal_conversion').modal('show');
+        });
+    }();
 
     $('#btn_generate_z').click(function(){
         if ($('#fromdatepdf').val() !== '' || $('#todatepdf').val() !== '')

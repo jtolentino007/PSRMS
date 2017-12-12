@@ -1453,7 +1453,7 @@
                         window.location.replace('Templates/layout/endbatch/0/preview');
                     } else {
                         showNotification(response);
-                        _isBatchEnded = 0;
+                        _isBatchEnded = 0;                  
                     }
                 });
             });
@@ -1461,6 +1461,7 @@
             $('#btn_pay').on('click',function(){
                 if (_amountTendered !== 0) {
                     if (parseFloat(accounting.unformat($('#mod_tendered').text())) >= parseFloat(accounting.unformat($('#mod_amount_due').text()))) {
+                        $('#btn_pay').prop('disabled',true);
                         payOrder().done(function(response){
                             showNotification(response);
                             $('#mod_tendered').html('0.00');
@@ -1469,6 +1470,7 @@
                             var _amountTendered = 0;
                             var _change = 0;
                             $('#modal_payment').modal('toggle');
+                            $('#btn_pay').prop('disabled',false);
                             window.onbeforeunload = null;
                             window.location.replace('Templates/layout/pospr/'+response.pos_payment_id+'/print');
                         });

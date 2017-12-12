@@ -89,7 +89,7 @@
 			<div class="col-md-4 col-md-offset-3">
 				<div class="panel panel-default" style="width:500px;">
 					<div class="panel-body">
-            <center><h1 style="font-family: 'Segoe UI', sans-serif; font-weight: 400;">LOGIN <br><small style="color: #2196f3;">POINT OF SALES</small></h1></center><br>
+            <center><h1 style="font-family: 'Segoe UI', sans-serif; font-weight: 400;">LOGIN</h1></center><br>
             <form class="form-horizontal" id="validate-form">
               <div class="form-group mb-md">
                   <div class="col-xs-12">

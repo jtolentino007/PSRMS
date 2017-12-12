@@ -27,6 +27,7 @@ class Templates extends CORE_Controller {
         $this->load->model('Pos_invoice_server_model');
         $this->load->model('Ingredients_model');
         $this->load->model('Recipes_model');
+        $this->load->model('Units_model');
     }
 
     public function index() {
@@ -629,13 +630,27 @@ class Templates extends CORE_Controller {
                         $inventoryfromdate = date("Y-m-d", strtotime($this->input->post('inventoryfromdate', TRUE)));
                         $inventorytodate = date("Y-m-d", strtotime($this->input->post('inventorytodate', TRUE)));
                         $m_company=$this->Company_model;
-                        $data['inventory']=$this->Inventory_model->get_inventory_onhand_list_filter($inventoryfromdate,$inventorytodate);
+                        //$data['inventory']=$this->Inventory_model->get_inventory_onhand_list_filter($inventoryfromdate,$inventorytodate);
+                        $data['inventory'] = $this->Inventory_model->get_actual_inventory($inventoryfromdate,$inventorytodate);
                         $company=$m_company->get_list();
                         $data['company_info']=$company[0];
 
                         echo $this->load->view('template/inventoryreports_content',$data,TRUE);
 
                         break;
+
+            case 'inventoryreports_print':
+                        $inventoryfromdate = date("Y-m-d H:i:s", strtotime($this->input->get('inventoryfromdate', TRUE)));
+                        $inventorytodate = date("Y-m-d H:i:s", strtotime($this->input->get('inventorytodate', TRUE)));
+                        $m_company=$this->Company_model;
+                        //$data['inventory']=$this->Inventory_model->get_inventory_onhand_list_filter($inventoryfromdate,$inventorytodate);
+                        $data['inventory'] = $this->Inventory_model->get_actual_inventory($inventoryfromdate,$inventorytodate);
+                        $company=$m_company->get_list();
+                        $data['company_info']=$company[0];
+
+                echo $this->load->view('template/inventoryreports_print',$data,TRUE);
+
+                break;
 
             case 'stockcard': //delivery invoice
                         $m_invoice=$this->Pos_payment_model;
@@ -758,6 +773,7 @@ class Templates extends CORE_Controller {
             case 'products-content':
                 $data['product_id'] = $this->input->get('pid',TRUE);
                 $data['product_name'] = $this->input->get('pn',TRUE);
+
                 $data['ingredients'] = $this->Ingredients_model->get_list(
                     'ingredients.is_deleted=FALSE',
                     'ingredients.*, units.unit_name',
@@ -766,20 +782,37 @@ class Templates extends CORE_Controller {
                     )
                 );
 
+                $data['products_list'] = $this->Products_model->get_list(
+                    'products.is_deleted = FALSE',
+                    'products.*, units.unit_name',
+                    array(
+                        array('units','units.unit_id = products.unit_id','left')
+                    )
+                );
+
                 $data['products'] = $this->Recipes_model->get_list(
                     'recipes.product_id = '.$this->input->get('pid',TRUE),
                     'products.*,
                     ingredients.ingredient_name,
+                    prod_ing.product_code prod_code,
+                    prod_ing.product_desc prod_name,
+                    prod_ing.unit_id prod_unit,
                     ingredients_categories.ingredient_category_name,
-                    units.unit_name,
+                    IFNULL(unit_prod.unit_id, units.unit_id) ingredient_unit,
+                    IFNULL(units.unit_name, unit_prod.unit_name) unit_name,
                     recipes.*',
                     array(
                         array('ingredients','ingredients.ingredient_id = recipes.ingredient_id','left'),
+                        array('products as prod_ing','prod_ing.product_code = recipes.ingredient_id','left'),
                         array('ingredients_categories','ingredients_categories.ingredient_category_id = ingredients.ingredient_category_id','left'),
                         array('units','units.unit_id = ingredients.ingredient_unit','left'),
+                        array('units unit_prod','unit_prod.unit_id = prod_ing.unit_id','left'),
                         array('products','products.product_id = recipes.product_id','left')
                     )
                 );
+
+                //echo json_encode($data);
+
                 echo $this->load->view('template/content_child',$data,TRUE);
                 break;
 

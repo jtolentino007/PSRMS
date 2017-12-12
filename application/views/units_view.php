@@ -21,6 +21,7 @@
 
     <link type="text/css" href="assets/plugins/datatables/dataTables.bootstrap.css" rel="stylesheet">
     <link type="text/css" href="assets/plugins/datatables/dataTables.themify.css" rel="stylesheet">
+    <link href="assets/plugins/select2/select2.min.css" rel="stylesheet">
 
     <style>
 
@@ -85,12 +86,14 @@
                                     <div id="div_unit_list">
                                         <div class="panel panel-default">
                                             <div class="panel-body table-responsive" style="border-top: 5px solid #2196f3;">
-                                            <h1>Product Units</h1>
+                                            <h1>Unit of measurement</h1>
                                                 <table id="tbl_units" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                                     <thead>
                                                     <tr>
+                                                        <th></th>
                                                         <th>Unit Name</th>
                                                         <th>Unit Description</th>
+                                                        <th>Unit Type</th>
                                                         <th><center>Action</center></th>
                                                     </tr>
                                                     </thead>
@@ -116,9 +119,9 @@
                                                         <label class="col-md-2 col-md-offset-2 control-label">* Unit Name :</label>
                                                         <div class="col-md-4">
                                                             <div class="input-group">
-                                                                                    <span class="input-group-addon">
-                                                                                        <i class="fa fa-users"></i>
-                                                                                    </span>
+                                                                <span class="input-group-addon">
+                                                                    <i class="fa fa-users"></i>
+                                                                </span>
                                                                 <input type="text" name="unit_name" class="form-control" placeholder="Unit Name" data-error-msg="Unit name is required!" required>
                                                             </div>
                                                         </div>
@@ -152,6 +155,27 @@
                 </div> <!-- #page-content -->
             </div>
 
+            <!-- Modal -->
+            <div id="modal_child_unit" class="modal fade" role="dialog">
+              <div class="modal-dialog modal-lg">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Conversion Details</h4>
+                  </div>
+                  <div class="modal-body">
+                    
+                  </div>
+                  <div class="modal-footer">
+                    <button id="btn_save_conversion" type="button" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div id="modal_units" class="modal fade" tabindex="-1" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -172,13 +196,12 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="form-group">
                                     <label class="col-md-3 col-md-offset-1 control-label"><strong>* Unit Description :</strong></label>
                                     <div class="col-md-7">
                                         <textarea name="unit_desc" class="form-control" data-error-msg="Unit Description is required!" placeholder="Description" required></textarea>
                                     </div>
-                                </div><br/>
+                                </div>
                             </form>
                         </div>
                         <div class="modal-footer">
@@ -189,23 +212,43 @@
                 </div>
             </div>
 
+            <!-- Modal -->
+            <div id="modal_new_child" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><i class="fa fa-plus"></i>&nbsp;Add new child unit</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form id="frm_child">
+                        <label><strong>* Child unit Name :</strong></label>
+                        <input type="text" id="txt_unit_name" name="unit_name" class="form-control" data-error-msg="Unit name is required" required>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button id="btn_save_child" type="button" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div id="modal_confirmation" class="modal fade" tabindex="-1" role="dialog"><!--modal-->
                 <div class="modal-dialog modal-sm">
-                    <div class="modal-content"><!---content--->
+                    <div class="modal-content"><!---content-->
                         <div class="modal-header">
                             <button type="button" class="close"   data-dismiss="modal" aria-hidden="true">X</button>
                             <h4 class="modal-title"><span id="modal_mode"> </span>Confirm Deletion</h4>
                         </div>
-
                         <div class="modal-body">
                             <p id="modal-body-message">Are you sure ?</p>
                         </div>
-
                         <div class="modal-footer">
                             <button id="btn_yes" type="button" class="btn btn-danger" data-dismiss="modal">Yes</button>
                             <button id="btn_close" type="button" class="btn btn-default" data-dismiss="modal">No</button>
                         </div>
-                    </div><!---content---->
+                    </div><!---content-->
                 </div>
             </div><!---modal-->
 
@@ -228,25 +271,44 @@
 <script src="assets/plugins/spinner/dist/spin.min.js"></script>
 <script src="assets/plugins/spinner/dist/ladda.min.js"></script>
 
-
+<!-- Select2 -->
+<script src="assets/plugins/select2/select2.full.min.js"></script>
 <script type="text/javascript" src="assets/plugins/datatables/jquery.dataTables.js"></script>
 <script type="text/javascript" src="assets/plugins/datatables/dataTables.bootstrap.js"></script>
 
 <script>
 
 $(document).ready(function(){
-    var dt; var _txnMode; var _selectedID; var _selectRowObj;
+    var dt; var _txnMode; var _selectedID; var _selectRowObj; var unitIDs = [];
 
     var initializeControls=function(){
         dt=$('#tbl_units').DataTable({
             "dom": '<"toolbar">frtip',
             "bLengthChange":false,
-            "ajax" : "Units/transaction/list",
+            "ajax" : "Units/transaction/list-primary",
             "columns": [
-                { targets:[0],data: "unit_name" },
-                { targets:[1],data: "unit_desc" },
                 {
-                    targets:[2],
+                    "targets": [0],
+                    "class":          "details-control",
+                    "orderable":      false,
+                    "data":           null,
+                    "defaultContent": ""
+                },
+                { targets:[1],data: "unit_name" },
+                { targets:[2],data: "unit_desc" },
+                { 
+                    targets:[3],data: "unit_type",
+                    render: function(data, type, full, meta) {
+                        if (data === "0") 
+                            return "No Type";
+                        else if (data === "1")
+                            return "Primary";
+                        else
+                            return "Sub-unit";
+                    }
+                },
+                {
+                    targets:[4],
                     render: function (data, type, full, meta){
                         var btn_edit='<button class="btn btn-primary btn-sm" name="edit_info"  style="margin-left:-15px;" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i> </button>';
                         var btn_trash='<button class="btn btn-danger btn-sm" name="remove_info" style="margin-right:0px;" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> </button>';
@@ -271,6 +333,7 @@ $(document).ready(function(){
             var tr = $(this).closest('tr');
             var row = dt.row( tr );
             var idx = $.inArray( tr.attr('id'), detailRows );
+            _selectedID = row.data().unit_id;
 
             if ( row.child.isShown() ) {
                 tr.removeClass( 'details' );
@@ -279,15 +342,79 @@ $(document).ready(function(){
                 detailRows.splice( idx, 1 );
             }
             else {
-                tr.addClass( 'details' );
 
-                row.child( format( row.data() ) ).show();
-
-                if ( idx === -1 ) {
-                    detailRows.push( tr.attr('id') );
-                }
+                $.ajax({
+                    "type":"html",
+                    "url":"Units/transaction/child?uid="+row.data().unit_id
+                }).done(function(response) {
+                    unitIDs = [];
+                    $('#modal_child_unit .modal-body').html('');
+                    $('#modal_child_unit .modal-body').html(response);
+                    reinitializeSelect2($('.cbo_child_unit'));
+                    $('#modal_child_unit').modal('show');
+                    
+                });
             }
         } );
+
+        $('#modal_child_unit').on('click', '#btn_create_child', function(){
+            $('#txt_unit_name').val('');
+            $('#modal_new_child').modal('show');
+        });
+
+        $('#modal_new_child').on('click', '#btn_save_child', function(){
+            if ($('#txt_unit_name').val() !== "")  {
+                createUnitSecondary().done(function(response){
+                    showNotification(response);
+                    $('.cbo_child_unit').append('<option value="'+response.row_added[0].unit_id+'">'+response.row_added[0].unit_name+'</option>');
+                    $('#modal_new_child').modal('hide');
+                });
+            } else {
+                showNotification({title:"Error!",stat:"error",msg:$('#txt_unit_name').data('error-msg')});
+                stat=false;
+                return false;
+            }
+        });
+
+        $('#modal_child_unit').on('click','#btn_remove_child', function(){
+            $(this).closest('tr').remove();
+            unitIDs.splice($.inArray($(this).closest('tr').find('input[name="unit_id[]"]').val(), unitIDs),1);
+        });
+
+        $('#modal_child_unit').on('select2:select', '.cbo_child_unit' , function(event){
+            var index = $.inArray($('#modal_child_unit .cbo_child_unit option:selected').val(), unitIDs);
+
+            if (index >= 0) {
+                event.preventDefault();
+                $(this).select2('val',null);
+            } else {
+
+                $('#tbl_unit_child tbody').append('<tr>' + 
+                    '<td class="hidden"><input type="hidden" name="sub_unit_id[]" value="' + $('#modal_child_unit .cbo_child_unit option:selected').val() + '"></td>' +
+                    '<td>'+ $('#modal_child_unit .cbo_child_unit option:selected').text() +'</td>' +
+                    '<td><input class="form-control text-center" type="number" name="equivalent_qty[]" value="0.00"></td>' +
+                    '<td><center><button id="btn_remove_child" class="btn btn-danger"><i class="fa fa-times"></i></button></center></td>' +
+                '<tr>');
+
+                unitIDs.push($('#modal_child_unit .cbo_child_unit option:selected').val());
+                $(this).select2('val',null);
+            }
+        });
+
+        $('#modal_child_unit').on('click', '#btn_save_conversion', function(){
+            var _dataChild = $('#frm_child_items').serializeArray();
+            _dataChild.push({ name: "unit_id", value: _selectedID });
+
+            $.ajax({
+                "dataType":"json",
+                "type":"POST",
+                "url":"Units/transaction/create-conversion",
+                "data":_dataChild
+            }).done(function(response){
+                showNotification(response);
+                $('#modal_child_unit').modal('hide');
+            });
+        });
 
         $('#btn_new').click(function(){
             _txnMode="new";
@@ -303,7 +430,7 @@ $(document).ready(function(){
             var data=dt.row(_selectRowObj).data();
             _selectedID=data.unit_id;
 
-            $('input,textarea').each(function(){
+            $('input,textarea,select').each(function(){
                 var _elem=$(this);
                 $.each(data,function(name,value){
                     if(_elem.attr('name')==name){
@@ -399,8 +526,18 @@ $(document).ready(function(){
         return stat;
     };
 
+    var reinitializeSelect2 = function(combobox) {
+        combobox.select2({
+            "placeholder":"Select Child Unit",
+            "allowClear":true
+        });
+
+        combobox.select2('val',null);
+    };
+
     var createUnit=function(){
         var _data=$('#frm_unit').serializeArray();
+        _data.push({name : "unit_type",value: 1});
 
         return $.ajax({
             "dataType":"json",
@@ -411,9 +548,23 @@ $(document).ready(function(){
         });
     };
 
+    var createUnitSecondary=function(){
+        var _data=$('#frm_child').serializeArray();
+        _data.push({name : "unit_type",value: 2});
+
+        return $.ajax({
+            "dataType":"json",
+            "type":"POST",
+            "url":"Units/transaction/create",
+            "data":_data,
+            "beforeSend": showSpinningProgress($('#btn_save_child'))
+        });
+    };
+
     var updateUnit=function(){
         var _data=$('#frm_unit').serializeArray();
         _data.push({name : "unit_id" ,value : _selectedID});
+        _data.push({name : "unit_type",value: 1});
 
         return $.ajax({
             "dataType":"json",
@@ -459,20 +610,6 @@ $(document).ready(function(){
     var clearFields=function(){
         $('input[required],textarea','#frm_unit').val('');
         $('form').find('input:first').focus();
-    };
-
-    function format ( d ) {
-        return '<br /><table style="margin-left:10%;width: 80%;">' +
-        '<thead>' +
-        '</thead>' +
-        '<tbody>' +
-        '<tr>' +
-        '<td>Unit Name : </td><td><b>'+ d.unit_name+'</b></td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td>Unit Description : </td><td>'+ d.unit_desc+'</td>' +
-        '</tr>' +
-        '</tbody></table><br />';
     };
 });
 

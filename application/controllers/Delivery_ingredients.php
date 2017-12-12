@@ -86,6 +86,7 @@
 					$m_delivery_ingredients_items = $this->Delivery_ingredients_items_model;
 
 					$delivery_ingredients_info_id = $this->input->get('id',TRUE);
+					$type = $this->input->get('type',TRUE);
 
 					$info = $m_delivery->get_list(
 						'delivery_ingredients_info.is_deleted = FALSE AND delivery_ingredients_info.delivery_ingredients_info_id = '.$delivery_ingredients_info_id,
@@ -106,7 +107,12 @@
 						)
 					);
 
-					echo $this->load->view('template/delivery_ingredients_invoice',$data,TRUE);
+					if ($type == null) {
+						echo $this->load->view('template/delivery_ingredients_invoice',$data,TRUE);
+					} else {
+						echo $this->load->view('template/delivery_ingredients_invoice',$data,TRUE);
+					}
+					
 					break;
 			}
 		}
@@ -127,6 +133,7 @@
 			$m_delivery_ingredients->posted_by_user = $this->session->user_id;
 			$m_delivery_ingredients->date_received = date('Y-m-d', strtotime($this->input->post('date_received',TRUE)));
 			$m_delivery_ingredients->remarks = $this->input->post('remarks',TRUE);
+			$m_delivery_ingredients->set('date_received_timestamp','NOW()');
 			$m_delivery_ingredients->save();
 
 			$delivery_ingredients_info_id = $m_delivery_ingredients->last_insert_id();
@@ -147,14 +154,14 @@
 			{
 				$m_delivery_ingredients_items->delivery_ingredients_info_id = $delivery_ingredients_info_id;
 				$m_delivery_ingredients_items->ingredient_id = $ingredient_id[$i];
-				$m_delivery_ingredients_items->delivery_ingredients_items_qty = $delivery_ingredients_items_qty[$i];
-				$m_delivery_ingredients_items->delivery_ingredients_items_discount = $delivery_ingredients_items_discount[$i];
-				$m_delivery_ingredients_items->delivery_ingredients_items_price = $delivery_ingredients_items_price[$i];
-				$m_delivery_ingredients_items->delivery_ingredients_items_line_total = $delivery_ingredients_items_line_total[$i];
-				$m_delivery_ingredients_items->delivery_ingredients_items_line_total_discount = $delivery_ingredients_items_line_total_discount[$i];
-				$m_delivery_ingredients_items->delivery_ingredients_items_tax_amount = $delivery_ingredients_items_tax_amount[$i];
-				$m_delivery_ingredients_items->delivery_ingredients_items_tax_rate = $delivery_ingredients_items_tax_rate[$i];
-				$m_delivery_ingredients_items->delivery_ingredients_items_non_tax_amount = $delivery_ingredients_items_non_tax_amount[$i];
+				$m_delivery_ingredients_items->delivery_ingredients_items_qty = $this->get_numeric_value($delivery_ingredients_items_qty[$i]);
+				$m_delivery_ingredients_items->delivery_ingredients_items_discount = $this->get_numeric_value($delivery_ingredients_items_discount[$i]);
+				$m_delivery_ingredients_items->delivery_ingredients_items_price = $this->get_numeric_value($delivery_ingredients_items_price[$i]);
+				$m_delivery_ingredients_items->delivery_ingredients_items_line_total = $this->get_numeric_value($delivery_ingredients_items_line_total[$i]);
+				$m_delivery_ingredients_items->delivery_ingredients_items_line_total_discount = $this->get_numeric_value($delivery_ingredients_items_line_total_discount[$i]);
+				$m_delivery_ingredients_items->delivery_ingredients_items_tax_amount = $this->get_numeric_value($delivery_ingredients_items_tax_amount[$i]);
+				$m_delivery_ingredients_items->delivery_ingredients_items_tax_rate = $this->get_numeric_value($delivery_ingredients_items_tax_rate[$i]);
+				$m_delivery_ingredients_items->delivery_ingredients_items_non_tax_amount = $this->get_numeric_value($delivery_ingredients_items_non_tax_amount[$i]);
 				$m_delivery_ingredients_items->save();
 			}
 
@@ -189,6 +196,7 @@
 			$m_delivery_ingredients->posted_by_user = $this->session->user_id;
 			$m_delivery_ingredients->date_received = date('Y-m-d', strtotime($this->input->post('date_received',TRUE)));
 			$m_delivery_ingredients->remarks = $this->input->post('remarks',TRUE);
+			$m_delivery_ingredients->set('date_received_timestamp','NOW()');
 			$m_delivery_ingredients->modify($delivery_ingredients_info_id);
 
 			$ingredient_id = $this->input->post('ingredient_id',TRUE);
@@ -207,14 +215,14 @@
 			{
 				$m_delivery_ingredients_items->delivery_ingredients_info_id = $delivery_ingredients_info_id;
 				$m_delivery_ingredients_items->ingredient_id = $ingredient_id[$i];
-				$m_delivery_ingredients_items->delivery_ingredients_items_qty = $delivery_ingredients_items_qty[$i];
-				$m_delivery_ingredients_items->delivery_ingredients_items_discount = $delivery_ingredients_items_discount[$i];
-				$m_delivery_ingredients_items->delivery_ingredients_items_price = $delivery_ingredients_items_price[$i];
-				$m_delivery_ingredients_items->delivery_ingredients_items_line_total = $delivery_ingredients_items_line_total[$i];
-				$m_delivery_ingredients_items->delivery_ingredients_items_line_total_discount = $delivery_ingredients_items_line_total_discount[$i];
-				$m_delivery_ingredients_items->delivery_ingredients_items_tax_amount = $delivery_ingredients_items_tax_amount[$i];
-				$m_delivery_ingredients_items->delivery_ingredients_items_tax_rate = $delivery_ingredients_items_tax_rate[$i];
-				$m_delivery_ingredients_items->delivery_ingredients_items_non_tax_amount = $delivery_ingredients_items_non_tax_amount[$i];
+				$m_delivery_ingredients_items->delivery_ingredients_items_qty = $this->get_numeric_value($delivery_ingredients_items_qty[$i]);
+				$m_delivery_ingredients_items->delivery_ingredients_items_discount = $this->get_numeric_value($delivery_ingredients_items_discount[$i]);
+				$m_delivery_ingredients_items->delivery_ingredients_items_price = $this->get_numeric_value($delivery_ingredients_items_price[$i]);
+				$m_delivery_ingredients_items->delivery_ingredients_items_line_total = $this->get_numeric_value($delivery_ingredients_items_line_total[$i]);
+				$m_delivery_ingredients_items->delivery_ingredients_items_line_total_discount = $this->get_numeric_value($delivery_ingredients_items_line_total_discount[$i]);
+				$m_delivery_ingredients_items->delivery_ingredients_items_tax_amount = $this->get_numeric_value($delivery_ingredients_items_tax_amount[$i]);
+				$m_delivery_ingredients_items->delivery_ingredients_items_tax_rate = $this->get_numeric_value($delivery_ingredients_items_tax_rate[$i]);
+				$m_delivery_ingredients_items->delivery_ingredients_items_non_tax_amount = $this->get_numeric_value($delivery_ingredients_items_non_tax_amount[$i]);
 				$m_delivery_ingredients_items->save();
 			}
 

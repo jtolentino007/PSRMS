@@ -45,7 +45,8 @@
 						array(
 							array('units','units.unit_id = ingredients.ingredient_unit', 'left'),
 							array('ingredients_categories','ingredients_categories.ingredient_category_id = ingredients.ingredient_category_id', 'left')
-						)
+						),
+						'ingredients_categories.ingredient_category_id'
 					);
 
 					echo json_encode($response);
@@ -57,12 +58,11 @@
 		{
 			$m_ingredients = $this->Ingredients_model;
 
-			$m_ingredients->ingredient_name = $this->input->post('ingredient_name',TRUE);
+			$m_ingredients->ingredient_name = strtoupper ($this->input->post('ingredient_name',TRUE));
 			$m_ingredients->ingredient_unit = $this->input->post('ingredient_unit',TRUE);
 			$m_ingredients->ingredient_category_id = $this->input->post('ingredient_category_id',TRUE);
 			$m_ingredients->ideal_qty = $this->get_numeric_value($this->input->post('ideal_qty',TRUE));
 			$m_ingredients->warning_qty = $this->get_numeric_value($this->input->post('warning_qty',TRUE));
-			$m_ingredients->ingredient_cost = $this->get_numeric_value($this->input->post('ingredient_cost',TRUE));
 			$m_ingredients->save();
 
 			$ingredient_id = $m_ingredients->last_insert_id();
@@ -81,12 +81,11 @@
 
 			$ingredient_id = $this->input->post('ingredient_id',TRUE);
 
-			$m_ingredients->ingredient_name = $this->input->post('ingredient_name',TRUE);
+			$m_ingredients->ingredient_name = strtoupper ($this->input->post('ingredient_name',TRUE));
 			$m_ingredients->ingredient_unit = $this->input->post('ingredient_unit',TRUE);
 			$m_ingredients->ingredient_category_id = $this->input->post('ingredient_category_id',TRUE);
 			$m_ingredients->ideal_qty = $this->get_numeric_value($this->input->post('ideal_qty',TRUE));
 			$m_ingredients->warning_qty = $this->get_numeric_value($this->input->post('warning_qty',TRUE));
-			$m_ingredients->ingredient_cost = $this->get_numeric_value($this->input->post('ingredient_cost',TRUE));
 			$m_ingredients->modify($ingredient_id);
 
 			$response['title'] = "Success!";

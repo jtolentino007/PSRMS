@@ -74,9 +74,6 @@ class Login extends CORE_Controller {
 
         $m_table_types=$this->Table_types_model;
         $m_table_types->create_default_table_type();
-
-        $m_shifts=$this->Shifts_model;
-        $m_shifts->create_default_shift();
     }
 
 
