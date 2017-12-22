@@ -40,6 +40,7 @@
         	$data['user_name'] = $this->session->user_fullname;
         	$data['user_group_id'] = $this->session->user_group_id;
         	$data['user_groups'] = $this->User_groups_model->get_list($this->session->user_group_id)[0];
+        	$data['products'] = $this->Products_model->get_list('is_deleted=FALSE');
 
 			$this->db->truncate('pos_invoice_ajax');
 			$this->db->truncate('pos_invoice_items_ajax');

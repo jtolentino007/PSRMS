@@ -16,6 +16,20 @@
             word-wrap: break-word!important;
         }
 
+        .text-middle {
+            vertical-align: middle;
+        }
+
+        .dataTables_filter input { 
+            width: 500px!important; 
+            position: absolute; 
+            top: 10px; 
+            left: 150px; 
+            border: 1px solid #d1d1d1!important;
+            font-size: 14px!important;
+            height: 30px!important;
+        }
+
         .btn-margin-bottom {
             margin-bottom: 20px!important;
         }
@@ -102,7 +116,8 @@
 
     </style>
 
-
+    <link type="text/css" href="assets/plugins/datatables/dataTables.bootstrap.css" rel="stylesheet">
+    <link type="text/css" href="assets/plugins/datatables/dataTables.themify.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="assets/css/theme.css">
     <style type="text/css">
          .modal-backdrop {
@@ -122,16 +137,19 @@
                     	<div class="container-fluid">
                             <div class="row">
                                 <div class="container-fluid">
-                                    <div class="col-xs-12 col-sm-6">
+                                    <div class="col-xs-12 col-sm-4">
                                         <h1 style="font-weight: 400;"><i class="fa fa-book" style="color: #ff9800;"></i> ORDERING SYSTEM<br><small id="cashier_name" style="text-transform: uppercase;"> <strong><?php echo $user_groups->user_group; ?></strong> : <?php echo $user_name; ?></small></h1>
                                     </div>
-                                    <div class="col-xs-12 col-sm-6">
+                                    <div class="col-xs-12 col-sm-8">
                                         <button id="btn_logout" class="btn btn-warning pull-right <?php echo ($this->session->user_group_id != 1 ? '' : 'hidden') ?>" style="margin-top: 10px; padding: 15px 30px;">
                                             <i class="fa fa-sign-out" style="font-size: 25px;"></i><br><span>Logout</span>
                                         </button>
                                         <a id="btn_home" href="dashboard" class="btn btn-warning pull-right <?php echo ($this->session->user_group_id != 2 ? '' : 'hidden') ?>" style="margin-top: 10px; padding: 15px 30px;">
                                             <i class="fa fa-home" style="font-size: 25px;"></i><br><span>Home</span>
                                         </a>
+                                        <button id="btn_lookup" class="btn btn-primary pull-right" style="margin-top: 10px; margin-right: 10px; padding: 15px 30px;" title="Customers">
+                                            <i class="fa fa-search" style="font-size: 25px;"></i><br><span>LOOKUP</span>
+                                        </button>
                                         <button id="btn_tables" class="btn btn-primary pull-right" style="margin-top: 10px; margin-right: 10px; padding: 15px 35px;" title="Tables">
                                             <i class="fa fa-table" style="font-size: 25px;"></i><br><span>Tables</span>
                                         </button>
@@ -359,6 +377,35 @@
                           </div>
                         </div>
 
+                        <!-- Modal -->
+                        <div id="modal_lookup" class="modal fade" role="dialog">
+                            <div class="modal-dialog" style="width: 70%;">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">PRODUCT LOOK-UP</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label>SEARCH PRODUCT :</label>
+                                        <table id="tbl_lookup" class="table">
+                                            <thead>
+                                                <th hidden>Product ID</th>
+                                                <th>Product Code</th>
+                                                <th>Product Name</th>
+                                                <th>Price</th>
+                                                <th>Tax</th>
+                                                <th>Action</th>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div id="modal_login" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
                           <div class="modal-dialog modal-md">
                             <!-- Modal content-->
@@ -487,7 +534,6 @@
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
                               </div>
                             </div>
-
                           </div>
                         </div>
 
@@ -771,6 +817,8 @@
     <!-- numeric formatter -->
     <script src="assets/plugins/formatter/autoNumeric.js" type="text/javascript"></script>
     <script src="assets/plugins/formatter/accounting.js" type="text/javascript"></script>
+    <script type="text/javascript" src="assets/plugins/datatables/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="assets/plugins/datatables/dataTables.bootstrap.js"></script>
 
     <script type="text/javascript">
         window.onbeforeunload = function() {
@@ -810,8 +858,43 @@
             var _btnTotalBeforeTax = 0;
             var _loginMode = 0;
             var _customerCount = 0;
+            var dt;
 
             toggleControls(true);
+
+            dt=$('#tbl_lookup').DataTable({
+                "dom": '<"toolbar">frtip',
+                "bLengthChange":false,
+                "bPaginate":false,
+                "ajax" : "Products/transaction/list",
+                "language": {
+                    "searchPlaceholder":"Search Products Here..."
+                },
+                "columns": [
+                    { 
+                        visible:false,
+                        class: 'text-middle',
+                        targets:[0],data: "product_id" 
+                    },
+                    { class: 'text-middle',targets:[1],data: "product_code" },
+                    { class: 'text-middle',targets:[2],data: "product_desc" },
+                    { 
+                        class:'text-right text-middle',
+                        targets:[3],data: "sale_cost" 
+                    },
+                    { 
+                        class:'text-right text-middle',
+                        targets:[4],data: "tax_rate" 
+                    },
+                    { 
+                        targets:[5],
+                        class:'text-center',
+                        render:function(){
+                            return '<button id="btn_select_product" class="btn btn-success" style="padding: 5px 10px;"><i class="fa fa-plus"></i></button>';
+                        }
+                     }
+                ]
+            });
 
             $('#modal_customer_count').on('click', '#btn_submit_count', function(){
                 if (_isAdditional !== 1 && _isEdit !== 1) {
@@ -1225,6 +1308,27 @@
                 $('input[name="user_name_manager"]').val('');
                 $('input[name="user_pword_manager"]').val('');
                 $('#modal_confirmation').modal('hide');
+            });
+
+            $('#btn_lookup').on('click', function(){
+                $('.modal-title').html('<i class="fa fa-search"></i>&nbsp;PRODUCT LOOKUP');
+                $('#modal_lookup').modal('show');
+            });
+
+            $('#tbl_lookup tbody').on('click', '#btn_select_product', function(){
+                var tr = $(this).closest('tr');
+                var rowData = dt.row(tr).data();
+
+                AppendProductToTable(rowData.product_id, rowData.product_desc, rowData.sale_cost, 0, rowData.tax_rate, 0, 0, rowData.vendor_id);
+                reComputeRowTotal();
+                recomputeTotal();
+                initializeNumeric();
+
+                InsertProducts();
+
+                if ($('#tbl_sales tbody tr').length > 0) {
+                    $('#btn_void').prop('disabled', false);
+                }
             });
 
             $('#tbl_unpaid').on('click', '#btn_edit_order', function(){
@@ -1868,13 +1972,8 @@
             });
 
             $('#product_container').on('click','#btn_product',function(){
-               _btn_product = $(this);
-
-               // if (_isEdit == 1) {
-               //      EditAppendProductToTable($(this).data('prod-id'), $(this).data('prod-desc'), $(this).data('prod-srp'), 0, $(this).data('prod-tax'), 0, 0, 1);
-               // } else {
-                    AppendProductToTable($(this).data('prod-id'), $(this).data('prod-desc'), $(this).data('prod-srp'), 0, $(this).data('prod-tax'), 0, 0, $(this).data('prod-vendor-id'));
-               // }
+                _btn_product = $(this);
+                AppendProductToTable($(this).data('prod-id'), $(this).data('prod-desc'), $(this).data('prod-srp'), 0, $(this).data('prod-tax'), 0, 0, $(this).data('prod-vendor-id'));
                 reComputeRowTotal();
                 recomputeTotal();
                 initializeNumeric();
@@ -2210,6 +2309,7 @@
                 $('#btn_end_batch').prop('disabled',false);
                 $('#btn_clear').prop('disabled',bValue);
                 $('#btn_servers').prop('disabled',bValue);
+                $('#btn_lookup').prop('disabled',bValue);
             };
 
             var payOrder = function() {
