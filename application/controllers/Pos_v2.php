@@ -3,7 +3,7 @@
 
 	class Pos_v2 extends CORE_Controller
 	{
-		
+
 		function __construct()
 		{
 			parent::__construct('');
@@ -92,13 +92,13 @@
 							pos_invoice_items.pos_price,
 							SUM(pos_invoice_items.pos_discount) pos_discount,
 							pos_invoice_items.tax_rate,
-							SUM(pos_invoice_items.tax_amount) tax_amount, 
-							SUM(pos_invoice_items.total) total, 
-							pi.pos_invoice_no, 
-							pi.total_discount, 
+							SUM(pos_invoice_items.tax_amount) tax_amount,
+							SUM(pos_invoice_items.total) total,
+							pi.pos_invoice_no,
+							pi.total_discount,
 							pi.before_tax,
-							pi.total_tax_amount, 
-							pi.total_after_tax, 
+							pi.total_tax_amount,
+							pi.total_after_tax,
 							c.customer_id,
 							c.customer_name,
 							p.product_desc,
@@ -146,11 +146,11 @@
 		{
 			$m_pos=$this->Pos_model;
 			$m_batches = $this->Batches_model;
-		
-			$sql="SELECT 
-				COUNT(*) 
-				non_ended_batch 
-				FROM pos_invoice 
+
+			$sql="SELECT
+				COUNT(*)
+				non_ended_batch
+				FROM pos_invoice
 				WHERE end_batch = FALSE";
 
 
@@ -169,10 +169,10 @@
 
 			if ($no_of_unpaid_invoices > 0) {
 				$response['title'] = "Error!";
-				$response['stat'] = "error";	
+				$response['stat'] = "error";
 				$response['msg'] = "There are unpaid invoices, please make sure invoices are paid before ending this batch.";
 			} else {
-				if ($no_of_non_ended_batch > 0) 
+				if ($no_of_non_ended_batch > 0)
 				{
 					$query = $this->db->update('pos_invoice', array('is_current_batch ' => FALSE));
 
@@ -195,17 +195,17 @@
 					$m_batches->modify($this->session->batch_id);
 
 					$response['title'] = "Success!";
-					$response['stat'] = "success";	
+					$response['stat'] = "success";
 					$response['msg'] = "Batch successfully ended";
-				} 
-				else 
+				}
+				else
 				{
 					$response['title'] = "Error!";
 					$response['stat'] = "error";
 					$response['msg'] = "End Batch Failed, no invoices found.";
 				}
 			}
-			
+
 
 			echo json_encode($response);
 		}
@@ -252,7 +252,7 @@
 			$grand_total = $this->input->post('grand_total', TRUE);
 			$status = $this->input->post('status', TRUE);
 
-			for($i=0;$i<count($product_id);$i++) 
+			for($i=0;$i<count($product_id);$i++)
 			{
 				$m_pos_items_ajax->customer_id = $customer_id;
 				$m_pos_items_ajax->pos_invoice_id = $pos_invoice_id;
@@ -344,6 +344,7 @@
 			$void_pos_qty = $this->input->post('pos_qty_void',TRUE);
 			$void_pos_price = $this->input->post('pos_price_void',TRUE);
 			$void_pos_total = $this->input->post('pos_total_void',TRUE);
+			$void_user_id = $this->input->post('user_id',TRUE);
 
 			for($v=0;$v<count($void_product_id);$v++)
 			{
@@ -353,7 +354,7 @@
 				$m_voids->pos_qty = $this->get_numeric_value($void_pos_qty[$v]);
 				$m_voids->pos_price = $this->get_numeric_value($void_pos_price[$v]);
 				$m_voids->pos_total = $this->get_numeric_value($void_pos_total[$v]);
-				$m_voids->user_id = $this->session->user_id;
+				$m_voids->user_id = $this->get_numeric_value($void_user_id[$v]);
 				$m_voids->save();
 			}
 
@@ -442,6 +443,7 @@
 			$void_pos_qty = $this->input->post('pos_qty_void',TRUE);
 			$void_pos_price = $this->input->post('pos_price_void',TRUE);
 			$void_pos_total = $this->input->post('pos_total_void',TRUE);
+			$void_user_id = $this->input->post('user_id',TRUE);
 
 			for($v=0;$v<count($void_product_id);$v++)
 			{
@@ -451,7 +453,7 @@
 				$m_voids->pos_qty = $this->get_numeric_value($void_pos_qty[$v]);
 				$m_voids->pos_price = $this->get_numeric_value($void_pos_price[$v]);
 				$m_voids->pos_total = $this->get_numeric_value($void_pos_total[$v]);
-				$m_voids->user_id = $this->session->user_id;
+				$m_voids->user_id = $this->get_numeric_value($void_user_id[$v]);
 				$m_voids->save();
 			}
 
@@ -527,6 +529,7 @@
 			$void_pos_qty = $this->input->post('pos_qty_void',TRUE);
 			$void_pos_price = $this->input->post('pos_price_void',TRUE);
 			$void_pos_total = $this->input->post('pos_total_void',TRUE);
+			$void_user_id = $this->input->post('user_id',TRUE);
 
 			for($v=0;$v<count($void_product_id);$v++)
 			{
@@ -536,7 +539,7 @@
 				$m_voids->pos_qty = $this->get_numeric_value($void_pos_qty[$v]);
 				$m_voids->pos_price = $this->get_numeric_value($void_pos_price[$v]);
 				$m_voids->pos_total = $this->get_numeric_value($void_pos_total[$v]);
-				$m_voids->user_id = $this->session->user_id;
+				$m_voids->user_id = $this->get_numeric_value($void_user_id[$v]);
 				$m_voids->save();
 			}
 
@@ -586,7 +589,7 @@
             echo json_encode($response);
 		}
 
-		public function response_rows($filter_value) 
+		public function response_rows($filter_value)
 		{
 			$m_pos = $this->Pos_model;
 			return $m_pos->get_list(

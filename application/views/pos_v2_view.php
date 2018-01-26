@@ -545,7 +545,7 @@
                                           </div>
                                           <div class="modal-body">
                                                 <center><h5 class="txt_customer_count">Please Enter Number of Customers for this order:</h5></center>
-                                                <input type="number" name="customer_count" class="form-control text-center" style="font-size: 25px!important; border: 1px solid #ddd!important;" value="0">
+                                                <input type="number" name="customer_count" class="form-control text-center" style="font-size: 25px!important; border: 1px solid #ddd!important;" value="1">
                                           </div>
                                           <div class="modal-footer">
                                                 <button id="btn_submit_count" type="button" class="btn btn-primary btn-block">Enter</button>
@@ -858,6 +858,7 @@
             var _btnTotalBeforeTax = 0;
             var _loginMode = 0;
             var _customerCount = 0;
+            var _voidBy;
             var dt;
 
             toggleControls(true);
@@ -934,6 +935,9 @@
 
                             if (v.name == "pos_total_void[]")
                                 _data.push({name: "pos_total_void[]", value: v.value});
+
+                            if (v.name == "user_id[]")
+                                _data.push({name: "user_id[]", value: v.value });
                         });
 
                         $.ajax({
@@ -957,6 +961,7 @@
                             window.onbeforeunload = null;
                             window.location.replace('Templates/layout/pospr-kitchen-bar/'+response.pos_invoice_id+'/print?vendorid=2');
                             _voidData = [];
+                            _voidBy = 0;
                             //pos_invoice_id/print_layout/vendor_id
                         });
                     }
@@ -1001,6 +1006,9 @@
 
                         if (v.name == "pos_total_void[]")
                             _data.push({name: "pos_total_void[]", value: v.value});
+                        
+                        if (v.name == "user_id[]")
+                            _data.push({name: "user_id[]", value: v.value });
                     });
 
                     if (_isEdit == 1) {
@@ -1056,6 +1064,7 @@
                             window.onbeforeunload = null;
                             window.location.replace('Templates/layout/pospr-kitchen-bar-add/'+response.pos_invoice_id+'/print?vendorid=2');
                             _voidData = [];
+                            _voidBy = 0;
                             _customerCount = 0;
                             $('#modal_customer_count').modal('hide');
                             //pos_invoice_id/print_layout/vendor_id
@@ -1683,6 +1692,7 @@
                     _voidData.push({name: "pos_qty_void[]", value: $(this).closest('tr').find('input[name="pos_qty[]"]').val() });
                     _voidData.push({name: "pos_price_void[]", value: $(this).closest('tr').find('input[name="pos_price[]"]').val() });
                     _voidData.push({name: "pos_total_void[]", value: $(this).closest('tr').find('input[name="total[]"]').val() });
+                    _voidData.push({name: "user_id[]", value: _voidBy });
 
                     _self.closest('tr').remove();
                     recomputeTotal();
@@ -1772,6 +1782,7 @@
                            $('.btn-remove').removeAttr('disabled');
                            showNotification(response);
                            $('#btn_void').prop('disabled',true);
+                           _voidBy = response.user_id;
                            $('#modal_login_manager').modal('toggle');
                         } else {
                            $.ajax({
